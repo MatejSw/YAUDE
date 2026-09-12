@@ -124,11 +124,12 @@ namespace YAUDE
         {
             mouseDown = true;
             selectedElement = null;
+            Point location = new Point((int)(e.X / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(e.Y / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100)));
 
             for (int i = elements.Count - 1; i >= 0; i--)
             {
                 Rectangle elementRect = new Rectangle(elements[i].Position, elements[i].Size);
-                if (elementRect.Contains(new Point((int)(e.X / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(e.Y / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100)))))
+                if (elementRect.Contains(location))
                 {
                     selectedElement = elements[i];
                     break;
@@ -142,7 +143,7 @@ namespace YAUDE
 
             else if (selectedTool == "addElement")
             {
-                addElement(e.Location);
+                addElement(location);
             }
 
             if (selectedTool == "deleteElement" && selectedElement != null)
@@ -305,7 +306,7 @@ namespace YAUDE
                 contextMenu.Items.Add(addItem);
                 addItem.Click += (s, args) =>
                 {
-                    addElement(location);
+                    addElement(new Point((int)(location.X / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(location.Y / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100))));
                 };
             }
 
