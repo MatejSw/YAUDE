@@ -8,5 +8,6 @@ namespace YAUDE
     {
         public string Name { get; set; }
         public string Type { get; set; }
+        public string Visibility { get; set; }
     }
 }

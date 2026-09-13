@@ -34,14 +34,14 @@ namespace YAUDE
 
         private void button_addAttribute_Click(object sender, EventArgs e)
         {
-            attributeBindingList.Add(new Attribute { Name = "NewAttribute", Type = "string" });
+            attributeBindingList.Add(new Attribute { Name = "NewAttribute", Type = "string", Visibility = "public" });
             dataGridView_attributes.Focus();
             button_deleteAttribute.Enabled = attributeBindingList.Count > 0;
         }
 
         private void button_addMethod_Click(object sender, EventArgs e)
         {
-            methodBindingList.Add(new Method { Name = "NewMethod", ReturnType = "void" });
+            methodBindingList.Add(new Method { Name = "NewMethod", ReturnType = "void", Visibility = "public" });
             dataGridView_methods.Focus();
             button_deleteMethod.Enabled = methodBindingList.Count > 0;
         }
@@ -95,6 +95,42 @@ namespace YAUDE
             if (dataGridView_methods.CurrentRow != null)
                 methodBindingList.RemoveAt(dataGridView_methods.CurrentRow.Index);
             button_deleteMethod.Enabled = methodBindingList.Count > 0;
+        }
+
+        private void dataGridView_attributes_Validating(object sender, CancelEventArgs e)
+        {
+            List<string> visibility = new List<string> { "public", "private", "protected", "internal" };
+            for (int i = 0; i < attributeBindingList.Count; i++)
+            {
+                Attribute attribute = attributeBindingList[i];
+                if (!visibility.Contains(attribute.Visibility))
+                {
+                    e.Cancel = true;
+                    errorProvider1.SetError(dataGridView_attributes, $"Invalid visibility for attribute (Row {i + 1}).");
+                    return;
+                }
+            }
+
+            e.Cancel = false;
+            errorProvider1.SetError(dataGridView_attributes, string.Empty);
+        }
+
+        private void dataGridView_methods_Validating(object sender, CancelEventArgs e)
+        {
+            List<string> visibility = new List<string> { "public", "private", "protected", "internal" };
+            for (int i = 0; i < methodBindingList.Count; i++)
+            {
+                Method method = methodBindingList[i];
+                if (!visibility.Contains(method.Visibility))
+                {
+                    e.Cancel = true;
+                    errorProvider1.SetError(dataGridView_methods, $"Invalid visibility for method (Row {i + 1}).");
+                    return;
+                }
+            }
+
+            e.Cancel = false;
+            errorProvider1.SetError(dataGridView_methods, string.Empty);
         }
     }
 }

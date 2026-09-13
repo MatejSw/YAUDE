@@ -49,9 +49,9 @@
             // 
             // textBox_className
             // 
-            textBox_className.Location = new Point(12, 36);
+            textBox_className.Location = new Point(17, 36);
             textBox_className.Name = "textBox_className";
-            textBox_className.Size = new Size(315, 23);
+            textBox_className.Size = new Size(456, 23);
             textBox_className.TabIndex = 0;
             textBox_className.TextChanged += textBox_className_TextChanged;
             textBox_className.Validating += textBox_className_Validating;
@@ -67,7 +67,7 @@
             // 
             // button_addAttribute
             // 
-            button_addAttribute.Location = new Point(303, 88);
+            button_addAttribute.Location = new Point(449, 88);
             button_addAttribute.Name = "button_addAttribute";
             button_addAttribute.Size = new Size(24, 24);
             button_addAttribute.TabIndex = 3;
@@ -82,8 +82,9 @@
             dataGridView_attributes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_attributes.Location = new Point(17, 118);
             dataGridView_attributes.Name = "dataGridView_attributes";
-            dataGridView_attributes.Size = new Size(310, 109);
+            dataGridView_attributes.Size = new Size(456, 109);
             dataGridView_attributes.TabIndex = 4;
+            dataGridView_attributes.Validating += dataGridView_attributes_Validating;
             // 
             // label2
             // 
@@ -110,12 +111,13 @@
             dataGridView_methods.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_methods.Location = new Point(17, 271);
             dataGridView_methods.Name = "dataGridView_methods";
-            dataGridView_methods.Size = new Size(310, 109);
+            dataGridView_methods.Size = new Size(456, 109);
             dataGridView_methods.TabIndex = 7;
+            dataGridView_methods.Validating += dataGridView_methods_Validating;
             // 
             // button_addMethod
             // 
-            button_addMethod.Location = new Point(303, 241);
+            button_addMethod.Location = new Point(449, 241);
             button_addMethod.Name = "button_addMethod";
             button_addMethod.Size = new Size(24, 24);
             button_addMethod.TabIndex = 6;
@@ -125,7 +127,7 @@
             // 
             // button_cancel
             // 
-            button_cancel.Location = new Point(252, 415);
+            button_cancel.Location = new Point(398, 415);
             button_cancel.Name = "button_cancel";
             button_cancel.Size = new Size(75, 23);
             button_cancel.TabIndex = 9;
@@ -135,7 +137,7 @@
             // 
             // button_ok
             // 
-            button_ok.Location = new Point(171, 415);
+            button_ok.Location = new Point(317, 415);
             button_ok.Name = "button_ok";
             button_ok.Size = new Size(75, 23);
             button_ok.TabIndex = 10;
@@ -149,7 +151,7 @@
             // 
             // button_deleteAttribute
             // 
-            button_deleteAttribute.Location = new Point(273, 88);
+            button_deleteAttribute.Location = new Point(419, 88);
             button_deleteAttribute.Name = "button_deleteAttribute";
             button_deleteAttribute.Size = new Size(24, 24);
             button_deleteAttribute.TabIndex = 11;
@@ -159,7 +161,7 @@
             // 
             // button_deleteMethod
             // 
-            button_deleteMethod.Location = new Point(273, 241);
+            button_deleteMethod.Location = new Point(419, 241);
             button_deleteMethod.Name = "button_deleteMethod";
             button_deleteMethod.Size = new Size(24, 24);
             button_deleteMethod.TabIndex = 12;
@@ -172,7 +174,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoValidate = AutoValidate.EnableAllowFocusChange;
-            ClientSize = new Size(339, 450);
+            ClientSize = new Size(485, 450);
             Controls.Add(button_deleteMethod);
             Controls.Add(button_deleteAttribute);
             Controls.Add(button_ok);

@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Drawing.Drawing2D;
 
 namespace YAUDE
 {
@@ -14,6 +15,14 @@ namespace YAUDE
         private int zoomLevel = 100; // Default zoom level is 100%
         private bool mouseDown = false;
         private DiagramClass selectedElement = null;
+        private DiagramClass targetElement = null;
+        private Dictionary<string, string> visibilitySymbols = new Dictionary<string, string>
+        {
+            { "public", "+" },
+            { "private", "-" },
+            { "protected", "#" },
+            { "internal", "~" }
+        };
         public Form1()
         {
             InitializeComponent();
@@ -24,33 +33,44 @@ namespace YAUDE
             e.Graphics.TranslateTransform(pan.X, pan.Y);
             e.Graphics.ScaleTransform(zoomLevel / 100f, zoomLevel / 100f);
 
+
             foreach (DiagramClass element in elements)
             {
+                int sizeX, sizeY;
 
-                SizeF stringSize = e.Graphics.MeasureString(element.Name, new Font("Arial Black", 10));
-                int sizeX = (int)stringSize.Width;
-                int sizeY = 60 + (element.Attributes.Count + element.Methods.Count) * 20;
+                calculateSize(element, e.Graphics, out sizeX, out sizeY);
 
-                for (int i = 0; i < element.Attributes.Count; i++)
+                for (int i = 0; i < element.Associations.Count; i++)
                 {
-                    SizeF attrSize = e.Graphics.MeasureString($"{element.Attributes[i].Name}: {element.Attributes[i].Type}", new Font("Arial", 10));
-                    sizeX = Math.Max(sizeX, (int)attrSize.Width);
+                    if (!elements.Select(x => x.Name).Contains(element.Associations[i]))
+                    {
+                        element.Associations.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+                    DiagramClass associatedClass = elements.First(x => x.Name == element.Associations[i]);
+                    e.Graphics.DrawLine(Pens.Black, element.Position.X + sizeX / 2, element.Position.Y + sizeY / 2, associatedClass.Position.X + associatedClass.Size.Width / 2, associatedClass.Position.Y + associatedClass.Size.Height / 2);
                 }
-                for (int i = 0; i < element.Methods.Count; i++)
+                for (int i = 0; i < element.Dependencies.Count; i++)
                 {
-                    SizeF methodSize = new SizeF(0, 0);
-
-                    if (element.Methods[i].ReturnType == "void")
+                    if (!elements.Select(x => x.Name).Contains(element.Dependencies[i]))
                     {
-                        methodSize = e.Graphics.MeasureString($"{element.Methods[i].Name}()", new Font("Arial", 10));
+                        element.Dependencies.RemoveAt(i);
+                        i--;
+                        continue;
                     }
-                    else
-                    {
-                        methodSize = e.Graphics.MeasureString($"{element.Methods[i].Name}(): {element.Methods[i].ReturnType}", new Font("Arial", 10));
-                    }
-
-                    sizeX = Math.Max(sizeX, (int)methodSize.Width);
+                    DiagramClass associatedClass = elements.First(x => x.Name == element.Dependencies[i]);
+                    AdjustableArrowCap bigArrow = new AdjustableArrowCap(10 * zoomLevel / 100f, 10 * zoomLevel / 100f);
+                    Pen pen = new Pen(Color.Black, 1);
+                    pen.CustomEndCap = bigArrow;
+                    e.Graphics.DrawLine(pen, element.Position.X + sizeX / 2, element.Position.Y + sizeY / 2, (int)((associatedClass.Position.X + associatedClass.Size.Width / 2) + (associatedClass.Size.Width / 2 * Math.Min(1, Math.Max(-1, (element.Position.X - associatedClass.Position.X) * 0.015)))), (int)((associatedClass.Position.Y + associatedClass.Size.Height / 2) + (associatedClass.Size.Height / 2 * Math.Min(1, Math.Max(-1, (element.Position.Y - associatedClass.Position.Y) * 0.015)))));
                 }
+            }
+
+            foreach (DiagramClass element in elements)
+            {
+                int sizeX, sizeY;
+                calculateSize(element, e.Graphics, out sizeX, out sizeY);
 
                 e.Graphics.FillRectangle(Brushes.LightBlue, new Rectangle(element.Position, new Size(sizeX + 10, sizeY)));
 
@@ -63,17 +83,17 @@ namespace YAUDE
 
                 for (int i = 0; i < element.Attributes.Count; i++)
                 {
-                    e.Graphics.DrawString($"{element.Attributes[i].Name}: {element.Attributes[i].Type}", new Font("Arial", 10), Brushes.Black, element.Position.X + 5, element.Position.Y + 20 + i * 20);
+                    e.Graphics.DrawString($"{visibilitySymbols[element.Attributes[i].Visibility]}{element.Attributes[i].Name}: {element.Attributes[i].Type}", new Font("Arial", 10), Brushes.Black, element.Position.X + 5, element.Position.Y + 20 + i * 20);
                 }
                 for (int i = 0; i < element.Methods.Count; i++)
                 {
                     if (element.Methods[i].ReturnType == "void")
                     {
-                        e.Graphics.DrawString($"{element.Methods[i].Name}()", new Font("Arial", 10), Brushes.Black, element.Position.X + 5, element.Position.Y + 40 + element.Attributes.Count * 20 + i * 20);
+                        e.Graphics.DrawString($"{visibilitySymbols[element.Methods[i].Visibility]}{element.Methods[i].Name}({element.Methods[i].Parameters})", new Font("Arial", 10), Brushes.Black, element.Position.X + 5, element.Position.Y + 40 + element.Attributes.Count * 20 + i * 20);
                     }
                     else
                     {
-                        e.Graphics.DrawString($"{element.Methods[i].Name}(): {element.Methods[i].ReturnType}", new Font("Arial", 10), Brushes.Black, element.Position.X + 5, element.Position.Y + 40 + element.Attributes.Count * 20 + i * 20);
+                        e.Graphics.DrawString($"{visibilitySymbols[element.Methods[i].Visibility]}{element.Methods[i].Name}({element.Methods[i].Parameters}): {element.Methods[i].ReturnType}", new Font("Arial", 10), Brushes.Black, element.Position.X + 5, element.Position.Y + 40 + element.Attributes.Count * 20 + i * 20);
                     }
                 }
 
@@ -123,16 +143,20 @@ namespace YAUDE
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             mouseDown = true;
-            selectedElement = null;
             Point location = new Point((int)(e.X / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(e.Y / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100)));
 
-            for (int i = elements.Count - 1; i >= 0; i--)
+            if (e.Button != MouseButtons.Middle)
             {
-                Rectangle elementRect = new Rectangle(elements[i].Position, elements[i].Size);
-                if (elementRect.Contains(location))
+                selectedElement = null;
+
+                for (int i = elements.Count - 1; i >= 0; i--)
                 {
-                    selectedElement = elements[i];
-                    break;
+                    Rectangle elementRect = new Rectangle(elements[i].Position, elements[i].Size);
+                    if (elementRect.Contains(location))
+                    {
+                        selectedElement = elements[i];
+                        break;
+                    }
                 }
             }
 
@@ -155,6 +179,58 @@ namespace YAUDE
             {
                 mouseStartPos = e.Location;
                 panStart = pan;
+            }
+
+            if (selectedTool == "addAssociation")
+            {
+                if (selectedElement == null)
+                {
+                    targetElement = null;
+                }
+                else if (targetElement == null)
+                {
+                    targetElement = selectedElement;
+                }
+                if (targetElement != null && selectedElement != null && targetElement != selectedElement)
+                {
+                    targetElement.Associations.Add(selectedElement.Name);
+                    targetElement = null;
+                    selectedElement = null;
+                }
+            }
+
+            if (selectedTool == "addDependency")
+            {
+                if (selectedElement == null)
+                {
+                    targetElement = null;
+                }
+                else if (targetElement == null)
+                {
+                    targetElement = selectedElement;
+                }
+                if (targetElement != null && selectedElement != null && targetElement != selectedElement)
+                {
+                    targetElement.Dependencies.Add(selectedElement.Name);
+                    targetElement = null;
+                    selectedElement = null;
+                }
+            }
+
+            if (selectedTool == "removeRelationships" && selectedElement != null)
+            {
+                for (int i = 0; i < elements.Count; i++)
+                {
+                    if (elements[i].Associations.Contains(selectedElement.Name))
+                    {
+                        elements[i].Associations.Remove(selectedElement.Name);
+                    }
+                }
+
+                selectedElement.Associations.Clear();
+                selectedElement.Dependencies.Clear();
+
+                selectedElement = null;
             }
 
             if (e.Button == MouseButtons.Right)
@@ -252,6 +328,9 @@ namespace YAUDE
                 if (editForm.ShowDialog() == DialogResult.OK)
                 {
                     selectedElement = editForm.diagramClass;
+
+                    autoAssignAssociations(selectedElement);
+
                     pictureBox1.Invalidate();
                 }
             }
@@ -261,7 +340,7 @@ namespace YAUDE
         {
             DiagramClass newClass = new DiagramClass
             {
-                Name = "New Class",
+                Name = "NewClass",
                 Position = location
             };
             elements.Add(newClass);
@@ -287,6 +366,9 @@ namespace YAUDE
                     if (editForm.ShowDialog() == DialogResult.OK)
                     {
                         selectedElement = editForm.diagramClass;
+
+                        autoAssignAssociations(selectedElement);
+
                         pictureBox1.Invalidate();
                     }
                 };
@@ -331,6 +413,82 @@ namespace YAUDE
             zoomLevel = Math.Max(zoomLevel - 10, 10); // Limit zoom level between 10% and 200%
             toolStripLabel_zoom.Text = $"{zoomLevel}%";
             pictureBox1.Invalidate();
+        }
+
+        private void calculateSize(DiagramClass element, Graphics g, out int sizeX, out int sizeY)
+        {
+            SizeF stringSize = g.MeasureString(element.Name, new Font("Arial Black", 10));
+            sizeX = (int)stringSize.Width;
+            sizeY = 60 + (element.Attributes.Count + element.Methods.Count) * 20;
+            for (int i = 0; i < element.Attributes.Count; i++)
+            {
+                SizeF attrSize = g.MeasureString($"{visibilitySymbols[element.Attributes[i].Visibility]}{element.Attributes[i].Name}: {element.Attributes[i].Type}", new Font("Arial", 10));
+                sizeX = Math.Max(sizeX, (int)attrSize.Width);
+            }
+            for (int i = 0; i < element.Methods.Count; i++)
+            {
+                SizeF methodSize = new SizeF(0, 0);
+                if (element.Methods[i].ReturnType == "void")
+                {
+                    methodSize = g.MeasureString($"{visibilitySymbols[element.Methods[i].Visibility]}{element.Methods[i].Name}({element.Methods[i].Parameters})", new Font("Arial", 10));
+                }
+                else
+                {
+                    methodSize = g.MeasureString($"{visibilitySymbols[element.Methods[i].Visibility]}{element.Methods[i].Name}({element.Methods[i].Parameters}): {element.Methods[i].ReturnType}", new Font("Arial", 10));
+                }
+                sizeX = Math.Max(sizeX, (int)methodSize.Width);
+            }
+        }
+
+        private void autoAssignAssociations(DiagramClass element)
+        {
+            bool autoAssign = false;
+
+            for (int i = 0; i < element.Attributes.Count; i++)
+            {
+                string attributeType = element.Attributes[i].Type.Replace("List<", "").Replace(">", "");
+                if (elements.Select(x => x.Name).Contains(attributeType) && !element.Associations.Contains(elements.Select(x => x.Name).First(x => x == attributeType)))
+                {
+                    if (!autoAssign)
+                    {
+                        if (MessageBox.Show("Class refrences an existing class. \n\n Would do like to auto-assing associations?", "Edit Class", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                        {
+                            autoAssign = true;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if (autoAssign)
+                    {
+                        element.Associations.Add(elements.Select(x => x.Name).First(x => x == attributeType));
+                    }
+                }
+            }
+
+            for (int i = 0; i < element.Methods.Count; i++)
+            {
+                string methodType = element.Methods[i].ReturnType.Replace("List<", "").Replace(">", "");
+                if (elements.Select(x => x.Name).Contains(methodType) && !element.Associations.Contains(elements.Select(x => x.Name).First(x => x == methodType)))
+                {
+                    if (!autoAssign)
+                    {
+                        if (MessageBox.Show("Class refrences an existing class. \n\n Would do like to auto-assing associations?", "Edit Class", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                        {
+                            autoAssign = true;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    if (autoAssign)
+                    {
+                        element.Associations.Add(elements.Select(x => x.Name).First(x => x == methodType));
+                    }
+                }
+            }
         }
     }
 }

@@ -63,6 +63,26 @@ namespace YAUDE.Properties {
         /// <summary>
         ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap addAssociation {
+            get {
+                object obj = ResourceManager.GetObject("addAssociation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap addDependency {
+            get {
+                object obj = ResourceManager.GetObject("addDependency", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap addElement {
             get {
                 object obj = ResourceManager.GetObject("addElement", resourceCulture);
@@ -96,6 +116,16 @@ namespace YAUDE.Properties {
         internal static System.Drawing.Bitmap pan {
             get {
                 object obj = ResourceManager.GetObject("pan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap removeRelationships {
+            get {
+                object obj = ResourceManager.GetObject("removeRelationships", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,7 +1,7 @@
 [
   {
     "Name": "Person",
-    "Position": "171, 176",
+    "Position": "184, 178",
     "Size": "100, 100",
     "Attributes": [
       {
@@ -16,7 +16,9 @@
       }
     ],
     "Methods": [],
-    "Associations": [],
+    "Associations": [
+      "Company"
+    ],
     "Dependencies": []
   },
   {
@@ -59,7 +61,10 @@
         "Visibility": "public"
       }
     ],
-    "Associations": [],
+    "Associations": [
+      "Person",
+      "Job"
+    ],
     "Dependencies": []
   },
   {
@@ -89,6 +94,8 @@
     "Attributes": [],
     "Methods": [],
     "Associations": [],
-    "Dependencies": []
+    "Dependencies": [
+      "Job"
+    ]
   }
 ]

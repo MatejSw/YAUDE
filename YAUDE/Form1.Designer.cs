@@ -37,7 +37,11 @@
             toolStripSeparator2 = new ToolStripSeparator();
             toolStripButton_addElement = new ToolStripButton();
             toolStripButton1 = new ToolStripButton();
+            toolStripSeparator3 = new ToolStripSeparator();
             toolStripLabel_status = new ToolStripLabel();
+            toolStripButton_addAssociation = new ToolStripButton();
+            toolStripButton4 = new ToolStripButton();
+            toolStripButton5 = new ToolStripButton();
             toolStripSeparator5 = new ToolStripSeparator();
             toolStripButton_zoomIn = new ToolStripButton();
             toolStripButton_zoomOut = new ToolStripButton();
@@ -74,7 +78,7 @@
             // toolStrip_bottom
             // 
             toolStrip_bottom.Dock = DockStyle.Bottom;
-            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton1, toolStripLabel_status, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
+            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton1, toolStripSeparator3, toolStripLabel_status, toolStripButton_addAssociation, toolStripButton4, toolStripButton5, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
             toolStrip_bottom.Location = new Point(0, 425);
             toolStrip_bottom.Name = "toolStrip_bottom";
             toolStrip_bottom.Size = new Size(800, 25);
@@ -137,11 +141,49 @@
             toolStripButton1.Text = "Delete element";
             toolStripButton1.Click += toolStripButton_Click;
             // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(6, 25);
+            // 
             // toolStripLabel_status
             // 
             toolStripLabel_status.Alignment = ToolStripItemAlignment.Right;
             toolStripLabel_status.Name = "toolStripLabel_status";
             toolStripLabel_status.Size = new Size(0, 22);
+            // 
+            // toolStripButton_addAssociation
+            // 
+            toolStripButton_addAssociation.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton_addAssociation.Image = Properties.Resources.addAssociation;
+            toolStripButton_addAssociation.ImageTransparentColor = Color.Magenta;
+            toolStripButton_addAssociation.Name = "toolStripButton_addAssociation";
+            toolStripButton_addAssociation.Size = new Size(23, 22);
+            toolStripButton_addAssociation.Tag = "addAssociation";
+            toolStripButton_addAssociation.Text = "Add Association";
+            toolStripButton_addAssociation.Click += toolStripButton_Click;
+            // 
+            // toolStripButton4
+            // 
+            toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton4.Image = Properties.Resources.addDependency;
+            toolStripButton4.ImageTransparentColor = Color.Magenta;
+            toolStripButton4.Name = "toolStripButton4";
+            toolStripButton4.Size = new Size(23, 22);
+            toolStripButton4.Tag = "addDependency";
+            toolStripButton4.Text = "Add Dependency";
+            toolStripButton4.Click += toolStripButton_Click;
+            // 
+            // toolStripButton5
+            // 
+            toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton5.Image = Properties.Resources.removeRelationships;
+            toolStripButton5.ImageTransparentColor = Color.Magenta;
+            toolStripButton5.Name = "toolStripButton5";
+            toolStripButton5.Size = new Size(23, 22);
+            toolStripButton5.Tag = "removeRelationships";
+            toolStripButton5.Text = "Remove Relationships";
+            toolStripButton5.Click += toolStripButton_Click;
             // 
             // toolStripSeparator5
             // 
@@ -285,5 +327,9 @@
         private ToolStripButton toolStripButton_zoomIn;
         private ToolStripButton toolStripButton_zoomOut;
         private ToolStripLabel toolStripLabel_zoom;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripButton toolStripButton_addAssociation;
+        private ToolStripButton toolStripButton4;
+        private ToolStripButton toolStripButton5;
     }
 }
