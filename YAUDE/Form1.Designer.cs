@@ -55,6 +55,9 @@
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripDropDownButton2 = new ToolStripDropDownButton();
             generateToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator6 = new ToolStripSeparator();
+            toolStripSplitButton1 = new ToolStripSplitButton();
+            programVersionToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             toolStrip_bottom.SuspendLayout();
             toolStrip_top.SuspendLayout();
@@ -95,7 +98,7 @@
             toolStripButton_cursor.Name = "toolStripButton_cursor";
             toolStripButton_cursor.Size = new Size(23, 22);
             toolStripButton_cursor.Tag = "cursor";
-            toolStripButton_cursor.Text = "Cursor";
+            toolStripButton_cursor.Text = "Cursor (C)";
             toolStripButton_cursor.Click += toolStripButton_Click;
             // 
             // toolStripSeparator4
@@ -111,7 +114,7 @@
             toolStripButton2.Name = "toolStripButton2";
             toolStripButton2.Size = new Size(23, 22);
             toolStripButton2.Tag = "pan";
-            toolStripButton2.Text = "Pan";
+            toolStripButton2.Text = "Pan (P)";
             toolStripButton2.Click += toolStripButton_Click;
             // 
             // toolStripSeparator2
@@ -127,7 +130,7 @@
             toolStripButton_addElement.Name = "toolStripButton_addElement";
             toolStripButton_addElement.Size = new Size(23, 22);
             toolStripButton_addElement.Tag = "addElement";
-            toolStripButton_addElement.Text = "Add element";
+            toolStripButton_addElement.Text = "Add element (A)";
             toolStripButton_addElement.Click += toolStripButton_Click;
             // 
             // toolStripButton1
@@ -138,7 +141,7 @@
             toolStripButton1.Name = "toolStripButton1";
             toolStripButton1.Size = new Size(23, 22);
             toolStripButton1.Tag = "deleteElement";
-            toolStripButton1.Text = "Delete element";
+            toolStripButton1.Text = "Delete element (D)";
             toolStripButton1.Click += toolStripButton_Click;
             // 
             // toolStripSeparator3
@@ -160,7 +163,7 @@
             toolStripButton_addAssociation.Name = "toolStripButton_addAssociation";
             toolStripButton_addAssociation.Size = new Size(23, 22);
             toolStripButton_addAssociation.Tag = "addAssociation";
-            toolStripButton_addAssociation.Text = "Add Association";
+            toolStripButton_addAssociation.Text = "Add Association (S)";
             toolStripButton_addAssociation.Click += toolStripButton_Click;
             // 
             // toolStripButton4
@@ -171,7 +174,7 @@
             toolStripButton4.Name = "toolStripButton4";
             toolStripButton4.Size = new Size(23, 22);
             toolStripButton4.Tag = "addDependency";
-            toolStripButton4.Text = "Add Dependency";
+            toolStripButton4.Text = "Add Dependency (E)";
             toolStripButton4.Click += toolStripButton_Click;
             // 
             // toolStripButton5
@@ -182,7 +185,7 @@
             toolStripButton5.Name = "toolStripButton5";
             toolStripButton5.Size = new Size(23, 22);
             toolStripButton5.Tag = "removeRelationships";
-            toolStripButton5.Text = "Remove Relationships";
+            toolStripButton5.Text = "Remove Relationships (R)";
             toolStripButton5.Click += toolStripButton_Click;
             // 
             // toolStripSeparator5
@@ -218,7 +221,7 @@
             // 
             // toolStrip_top
             // 
-            toolStrip_top.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, toolStripSeparator1, toolStripDropDownButton2 });
+            toolStrip_top.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, toolStripSeparator1, toolStripDropDownButton2, toolStripSeparator6, toolStripSplitButton1 });
             toolStrip_top.Location = new Point(0, 0);
             toolStrip_top.Name = "toolStrip_top";
             toolStrip_top.Size = new Size(800, 25);
@@ -238,28 +241,32 @@
             // newToolStripMenuItem
             // 
             newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(123, 22);
+            newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
+            newToolStripMenuItem.Size = new Size(195, 22);
             newToolStripMenuItem.Text = "New";
             newToolStripMenuItem.Click += newToolStripMenuItem_Click;
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(123, 22);
+            openToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+O";
+            openToolStripMenuItem.Size = new Size(195, 22);
             openToolStripMenuItem.Text = "Open";
             openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem1
             // 
             saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-            saveToolStripMenuItem1.Size = new Size(123, 22);
+            saveToolStripMenuItem1.ShortcutKeyDisplayString = "Ctrl+S";
+            saveToolStripMenuItem1.Size = new Size(195, 22);
             saveToolStripMenuItem1.Text = "Save";
             saveToolStripMenuItem1.Click += saveToolStripMenuItem1_Click;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(123, 22);
+            saveAsToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Shift+S";
+            saveAsToolStripMenuItem.Size = new Size(195, 22);
             saveAsToolStripMenuItem.Text = "Save As...";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
@@ -284,6 +291,28 @@
             generateToolStripMenuItem.Size = new Size(207, 22);
             generateToolStripMenuItem.Text = "Generate (Coming soon!)";
             // 
+            // toolStripSeparator6
+            // 
+            toolStripSeparator6.Name = "toolStripSeparator6";
+            toolStripSeparator6.Size = new Size(6, 25);
+            // 
+            // toolStripSplitButton1
+            // 
+            toolStripSplitButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripSplitButton1.DropDownItems.AddRange(new ToolStripItem[] { programVersionToolStripMenuItem });
+            toolStripSplitButton1.Image = (Image)resources.GetObject("toolStripSplitButton1.Image");
+            toolStripSplitButton1.ImageTransparentColor = Color.Magenta;
+            toolStripSplitButton1.Name = "toolStripSplitButton1";
+            toolStripSplitButton1.Size = new Size(48, 22);
+            toolStripSplitButton1.Text = "Help";
+            // 
+            // programVersionToolStripMenuItem
+            // 
+            programVersionToolStripMenuItem.Name = "programVersionToolStripMenuItem";
+            programVersionToolStripMenuItem.Size = new Size(180, 22);
+            programVersionToolStripMenuItem.Text = "Program Version";
+            programVersionToolStripMenuItem.Click += programVersionToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -292,6 +321,7 @@
             Controls.Add(toolStrip_top);
             Controls.Add(toolStrip_bottom);
             Controls.Add(pictureBox1);
+            KeyPreview = true;
             Name = "Form1";
             Text = "YAUDE";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -331,5 +361,8 @@
         private ToolStripButton toolStripButton_addAssociation;
         private ToolStripButton toolStripButton4;
         private ToolStripButton toolStripButton5;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripSplitButton toolStripSplitButton1;
+        private ToolStripMenuItem programVersionToolStripMenuItem;
     }
 }

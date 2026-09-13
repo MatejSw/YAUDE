@@ -9,6 +9,7 @@ namespace YAUDE
         public string Name { get; set; }
         public Point Position { get; set; }
         public Size Size { get; set; }
+        public Color color { get; set; }
         public List<Attribute> Attributes { get; set; }
         public List<Method> Methods { get; set; }
         public List<string> Associations { get; set; }

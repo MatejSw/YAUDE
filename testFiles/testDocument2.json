@@ -1,8 +1,9 @@
 [
   {
     "Name": "Person",
-    "Position": "171, 176",
+    "Position": "164, 17",
     "Size": "100, 100",
+    "color": "LightBlue",
     "Attributes": [
       {
         "Name": "Name",
@@ -16,13 +17,16 @@
       }
     ],
     "Methods": [],
-    "Associations": [],
+    "Associations": [
+      "Company"
+    ],
     "Dependencies": []
   },
   {
     "Name": "Company",
     "Position": "373, 77",
     "Size": "162, 180",
+    "color": "128, 128, 192",
     "Attributes": [
       {
         "Name": "Workers",
@@ -59,13 +63,17 @@
         "Visibility": "public"
       }
     ],
-    "Associations": [],
+    "Associations": [
+      "Person",
+      "Job"
+    ],
     "Dependencies": []
   },
   {
     "Name": "Job",
     "Position": "391, -138",
     "Size": "115, 100",
+    "color": "255, 128, 64",
     "Attributes": [
       {
         "Name": "Payment",
@@ -84,11 +92,14 @@
   },
   {
     "Name": "ItSpecialist",
-    "Position": "611, 12",
+    "Position": "709, -38",
     "Size": "100, 60",
+    "color": "Yellow",
     "Attributes": [],
     "Methods": [],
     "Associations": [],
-    "Dependencies": []
+    "Dependencies": [
+      "Job"
+    ]
   }
 ]

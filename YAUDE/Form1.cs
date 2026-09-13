@@ -38,7 +38,7 @@ namespace YAUDE
             {
                 int sizeX, sizeY;
 
-                calculateSize(element, e.Graphics, out sizeX, out sizeY);
+                CalculateSize(element, e.Graphics, out sizeX, out sizeY);
 
                 for (int i = 0; i < element.Associations.Count; i++)
                 {
@@ -70,9 +70,9 @@ namespace YAUDE
             foreach (DiagramClass element in elements)
             {
                 int sizeX, sizeY;
-                calculateSize(element, e.Graphics, out sizeX, out sizeY);
+                CalculateSize(element, e.Graphics, out sizeX, out sizeY);
 
-                e.Graphics.FillRectangle(Brushes.LightBlue, new Rectangle(element.Position, new Size(sizeX + 10, sizeY)));
+                e.Graphics.FillRectangle(new SolidBrush(element.color), new Rectangle(element.Position, new Size(sizeX + 10, sizeY)));
 
                 e.Graphics.DrawRectangle(Pens.Black, new Rectangle(element.Position, new Size(sizeX + 10, sizeY)));
 
@@ -108,25 +108,7 @@ namespace YAUDE
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                using (StreamReader reader = new StreamReader(openFileDialog.FileName))
-                {
-                    string json = reader.ReadToEnd();
-                    elements = JsonConvert.DeserializeObject<List<DiagramClass>>(json);
-                }
-                toolStripLabel_status.Text = $"Loaded diagram: {openFileDialog.SafeFileName}";
-                filePath = openFileDialog.FileName;
-                deselectTool();
-                toolStripButton_cursor.Checked = true;
-                selectedTool = "cursor";
-                pictureBox1.Invalidate();
-                this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
-                pan = new Point(0, 0);
-            }
+            Open();
         }
 
         private void deselectTool()
@@ -268,56 +250,17 @@ namespace YAUDE
 
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (filePath == null)
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    filePath = saveFileDialog.FileName;
-                }
-                else
-                {
-                    return; // User cancelled the save operation
-                }
-            }
-            using (StreamWriter writer = new StreamWriter(filePath))
-            {
-                string json = JsonConvert.SerializeObject(elements, Formatting.Indented);
-                writer.Write(json);
-            }
-            toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(filePath)}";
-            this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
+            Save();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
-                {
-                    string json = JsonConvert.SerializeObject(elements, Formatting.Indented);
-                    writer.Write(json);
-                }
-                toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(saveFileDialog.FileName)}";
-            }
+            SaveAs();
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            filePath = null;
-            elements.Clear();
-            deselectTool();
-            toolStripButton_cursor.Checked = true;
-            selectedTool = "cursor";
-            toolStripLabel_status.Text = "";
-            pictureBox1.Invalidate();
-            pan = new Point(0, 0);
-            zoomLevel = 100;
-            toolStripLabel_zoom.Text = $"{zoomLevel}%";
-            this.Text = "YAUDE";
+            New();
         }
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
@@ -329,7 +272,7 @@ namespace YAUDE
                 {
                     selectedElement = editForm.diagramClass;
 
-                    autoAssignAssociations(selectedElement);
+                    AutoAssignAssociations(selectedElement);
 
                     pictureBox1.Invalidate();
                 }
@@ -341,7 +284,8 @@ namespace YAUDE
             DiagramClass newClass = new DiagramClass
             {
                 Name = "NewClass",
-                Position = location
+                Position = location,
+                color = Color.LightBlue,
             };
             elements.Add(newClass);
             deselectTool();
@@ -367,8 +311,21 @@ namespace YAUDE
                     {
                         selectedElement = editForm.diagramClass;
 
-                        autoAssignAssociations(selectedElement);
+                        AutoAssignAssociations(selectedElement);
 
+                        pictureBox1.Invalidate();
+                    }
+                };
+
+                ToolStripMenuItem editColor = new ToolStripMenuItem("Edit Color");
+                contextMenu.Items.Add(editColor);
+
+                editColor.Click += (s, args) =>
+                {
+                    ColorDialog colorDialog = new ColorDialog();
+                    if (colorDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        selectedElement.color = colorDialog.Color;
                         pictureBox1.Invalidate();
                     }
                 };
@@ -415,7 +372,7 @@ namespace YAUDE
             pictureBox1.Invalidate();
         }
 
-        private void calculateSize(DiagramClass element, Graphics g, out int sizeX, out int sizeY)
+        private void CalculateSize(DiagramClass element, Graphics g, out int sizeX, out int sizeY)
         {
             SizeF stringSize = g.MeasureString(element.Name, new Font("Arial Black", 10));
             sizeX = (int)stringSize.Width;
@@ -440,7 +397,7 @@ namespace YAUDE
             }
         }
 
-        private void autoAssignAssociations(DiagramClass element)
+        private void AutoAssignAssociations(DiagramClass element)
         {
             bool autoAssign = false;
 
@@ -489,6 +446,136 @@ namespace YAUDE
                     }
                 }
             }
+        }
+
+        private void Save()
+        {
+            if (filePath == null)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filePath = saveFileDialog.FileName;
+                }
+                else
+                {
+                    return; // User cancelled the save operation
+                }
+            }
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                string json = JsonConvert.SerializeObject(elements, Formatting.Indented);
+                writer.Write(json);
+            }
+            toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(filePath)}";
+            this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
+        }
+
+        private void SaveAs()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
+                {
+                    string json = JsonConvert.SerializeObject(elements, Formatting.Indented);
+                    writer.Write(json);
+                }
+                toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(saveFileDialog.FileName)}";
+                filePath = saveFileDialog.FileName;
+                this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
+            }
+        }
+
+        private void Open()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamReader reader = new StreamReader(openFileDialog.FileName))
+                {
+                    string json = reader.ReadToEnd();
+                    elements = JsonConvert.DeserializeObject<List<DiagramClass>>(json);
+                }
+                toolStripLabel_status.Text = $"Loaded diagram: {openFileDialog.SafeFileName}";
+                filePath = openFileDialog.FileName;
+                deselectTool();
+                toolStripButton_cursor.Checked = true;
+                selectedTool = "cursor";
+                pictureBox1.Invalidate();
+                this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
+                pan = new Point(0, 0);
+            }
+        }
+
+        private void New()
+        {
+            filePath = null;
+            elements.Clear();
+            deselectTool();
+            toolStripButton_cursor.Checked = true;
+            selectedTool = "cursor";
+            toolStripLabel_status.Text = "";
+            pictureBox1.Invalidate();
+            pan = new Point(0, 0);
+            zoomLevel = 100;
+            toolStripLabel_zoom.Text = $"{zoomLevel}%";
+            this.Text = "YAUDE";
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            Dictionary<string, Keys> toolShortcuts = new Dictionary<string, Keys>
+            {
+                { "cursor", Keys.C },
+                { "addElement", Keys.A },
+                { "deleteElement", Keys.D },
+                { "pan", Keys.P },
+                { "addAssociation", Keys.S },
+                { "addDependency", Keys.E },
+                { "removeRelationships", Keys.R }
+            };
+
+            Dictionary<Keys, Action> shortcutActions = new Dictionary<Keys, Action>
+            {
+                { Keys.Delete, () => { if (selectedElement != null) { elements.Remove(selectedElement); selectedElement = null; pictureBox1.Invalidate(); } } },
+                { (Keys.Control | Keys.S), () => Save() },
+                { (Keys.Control | Keys.Shift | Keys.S), () => SaveAs() },
+                { (Keys.Control | Keys.N), () => New() },
+                { (Keys.Control | Keys.O), () => Open() }
+            };
+
+            if (toolShortcuts.ContainsValue(keyData))
+            {
+                string toolName = toolShortcuts.FirstOrDefault(x => x.Value == keyData).Key;
+                deselectTool();
+                foreach (object item in this.toolStrip_bottom.Items)
+                {
+                    if (item is ToolStripButton button && button.Tag.ToString() == toolName)
+                    {
+                        button.Checked = true;
+                        selectedTool = toolName;
+                        break;
+                    }
+                }
+            }
+
+            if (shortcutActions.ContainsKey(keyData))
+            {
+                shortcutActions[keyData].Invoke();
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void programVersionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProgramVersionForm versionForm = new ProgramVersionForm();
+            versionForm.ShowDialog();
         }
     }
 }
