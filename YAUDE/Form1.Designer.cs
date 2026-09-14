@@ -56,7 +56,7 @@
             toolStripDropDownButton2 = new ToolStripDropDownButton();
             generateToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator6 = new ToolStripSeparator();
-            toolStripSplitButton1 = new ToolStripSplitButton();
+            toolStripDropDownButton3 = new ToolStripDropDownButton();
             programVersionToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             toolStrip_bottom.SuspendLayout();
@@ -221,7 +221,7 @@
             // 
             // toolStrip_top
             // 
-            toolStrip_top.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, toolStripSeparator1, toolStripDropDownButton2, toolStripSeparator6, toolStripSplitButton1 });
+            toolStrip_top.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, toolStripSeparator1, toolStripDropDownButton2, toolStripSeparator6, toolStripDropDownButton3 });
             toolStrip_top.Location = new Point(0, 0);
             toolStrip_top.Name = "toolStrip_top";
             toolStrip_top.Size = new Size(800, 25);
@@ -296,15 +296,15 @@
             toolStripSeparator6.Name = "toolStripSeparator6";
             toolStripSeparator6.Size = new Size(6, 25);
             // 
-            // toolStripSplitButton1
+            // toolStripDropDownButton3
             // 
-            toolStripSplitButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripSplitButton1.DropDownItems.AddRange(new ToolStripItem[] { programVersionToolStripMenuItem });
-            toolStripSplitButton1.Image = (Image)resources.GetObject("toolStripSplitButton1.Image");
-            toolStripSplitButton1.ImageTransparentColor = Color.Magenta;
-            toolStripSplitButton1.Name = "toolStripSplitButton1";
-            toolStripSplitButton1.Size = new Size(48, 22);
-            toolStripSplitButton1.Text = "Help";
+            toolStripDropDownButton3.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButton3.DropDownItems.AddRange(new ToolStripItem[] { programVersionToolStripMenuItem });
+            toolStripDropDownButton3.Image = (Image)resources.GetObject("toolStripDropDownButton3.Image");
+            toolStripDropDownButton3.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButton3.Name = "toolStripDropDownButton3";
+            toolStripDropDownButton3.Size = new Size(45, 22);
+            toolStripDropDownButton3.Text = "Help";
             // 
             // programVersionToolStripMenuItem
             // 
@@ -362,7 +362,7 @@
         private ToolStripButton toolStripButton4;
         private ToolStripButton toolStripButton5;
         private ToolStripSeparator toolStripSeparator6;
-        private ToolStripSplitButton toolStripSplitButton1;
+        private ToolStripDropDownButton toolStripDropDownButton3;
         private ToolStripMenuItem programVersionToolStripMenuItem;
     }
 }

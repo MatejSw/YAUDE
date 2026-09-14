@@ -142,17 +142,17 @@ namespace YAUDE
                 }
             }
 
-            if (selectedTool == "cursor" && selectedElement != null)
+            if (selectedTool == "cursor" && selectedElement != null && e.Button == MouseButtons.Left)
             {
                 mouseDownLocationFromElement = new Point((int)(e.X / ((double)zoomLevel / 100) - selectedElement.Position.X), (int)(e.Y / ((double)zoomLevel / 100) - selectedElement.Position.Y));
             }
 
-            else if (selectedTool == "addElement")
+            else if (selectedTool == "addElement" && e.Button == MouseButtons.Left)
             {
                 addElement(location);
             }
 
-            if (selectedTool == "deleteElement" && selectedElement != null)
+            if (selectedTool == "deleteElement" && selectedElement != null && e.Button == MouseButtons.Left)
             {
                 elements.Remove(selectedElement);
             }
@@ -163,7 +163,7 @@ namespace YAUDE
                 panStart = pan;
             }
 
-            if (selectedTool == "addAssociation")
+            if (selectedTool == "addAssociation" && e.Button == MouseButtons.Left)
             {
                 if (selectedElement == null)
                 {
@@ -181,7 +181,7 @@ namespace YAUDE
                 }
             }
 
-            if (selectedTool == "addDependency")
+            if (selectedTool == "addDependency" && e.Button == MouseButtons.Left)
             {
                 if (selectedElement == null)
                 {
@@ -199,7 +199,7 @@ namespace YAUDE
                 }
             }
 
-            if (selectedTool == "removeRelationships" && selectedElement != null)
+            if (selectedTool == "removeRelationships" && selectedElement != null && e.Button == MouseButtons.Left)
             {
                 for (int i = 0; i < elements.Count; i++)
                 {
@@ -237,7 +237,7 @@ namespace YAUDE
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (mouseDown && selectedTool == "cursor" && selectedElement != null)
+            if (mouseDown && selectedTool == "cursor" && selectedElement != null && e.Button == MouseButtons.Left)
             {
                 selectedElement.Position = new Point((int)(e.X / ((double)zoomLevel / 100) - mouseDownLocationFromElement.X), (int)(e.Y / ((double)zoomLevel / 100) - mouseDownLocationFromElement.Y));
                 pictureBox1.Invalidate(); // Refresh the PictureBox to show the moved class

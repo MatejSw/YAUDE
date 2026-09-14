@@ -171,9 +171,11 @@
             // 
             // EditClassForm
             // 
+            AcceptButton = button_ok;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoValidate = AutoValidate.EnableAllowFocusChange;
+            CancelButton = button_cancel;
             ClientSize = new Size(485, 450);
             Controls.Add(button_deleteMethod);
             Controls.Add(button_deleteAttribute);
@@ -187,8 +189,10 @@
             Controls.Add(button_addAttribute);
             Controls.Add(label1);
             Controls.Add(textBox_className);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             ImeMode = ImeMode.On;
             Name = "EditClassForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "EditClassForm";
             ((System.ComponentModel.ISupportInitialize)dataGridView_attributes).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView_methods).EndInit();

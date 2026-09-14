@@ -52,7 +52,7 @@
             label1.Name = "label1";
             label1.Size = new Size(122, 28);
             label1.TabIndex = 1;
-            label1.Text = "Version 0.1.2";
+            label1.Text = "Version 0.1.3";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label2
@@ -73,7 +73,9 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(pictureBox1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "ProgramVersionForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Program Version";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
