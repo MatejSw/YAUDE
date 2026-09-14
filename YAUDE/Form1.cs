@@ -26,11 +26,12 @@ namespace YAUDE
         public Form1()
         {
             InitializeComponent();
+            this.pictureBox1.MouseWheel += PictureBox1_MouseWheel;
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.TranslateTransform(pan.X, pan.Y);
+            e.Graphics.TranslateTransform(pan.X + pictureBox1.Width/2, pan.Y + pictureBox1.Height / 2);
             e.Graphics.ScaleTransform(zoomLevel / 100f, zoomLevel / 100f);
 
 
@@ -360,16 +361,50 @@ namespace YAUDE
 
         private void toolStripButton_zoomIn_Click(object sender, EventArgs e)
         {
-            zoomLevel = Math.Min(zoomLevel + 10, 200); // Limit zoom level between 10% and 200%
-            toolStripLabel_zoom.Text = $"{zoomLevel}%";
-            pictureBox1.Invalidate();
+            ZoomIn(new Point(this.Width / 2, this.Height / 2));
         }
 
         private void toolStripButton_zoomOut_Click(object sender, EventArgs e)
         {
+            ZoomOut(new Point(this.Width / 2, this.Height / 2));
+        }
+
+        private Point ZoomPan(Point e)
+        {
+            Point mouse = new Point((int)(e.X / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(e.Y / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100)));
+            Point center = new Point((int)(this.Width / 2 / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(this.Height / 2 / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100)));
+
+            return new Point(mouse.X - center.X, mouse.Y - center.Y);
+        }
+
+        private void ZoomIn(Point location)
+        {
+            zoomLevel = Math.Min(zoomLevel + 10, 200); // Limit zoom level between 10% and 200%
+            toolStripLabel_zoom.Text = $"{zoomLevel}%";
+            Point panOffset = ZoomPan(location);
+            pan = new Point(pan.X - (int)(panOffset.X / 0.2), pan.Y - (int)(panOffset.Y / 0.2));
+            pictureBox1.Invalidate();
+        }
+
+        private void ZoomOut(Point location)
+        {
             zoomLevel = Math.Max(zoomLevel - 10, 10); // Limit zoom level between 10% and 200%
             toolStripLabel_zoom.Text = $"{zoomLevel}%";
+            Point panOffset = ZoomPan(location);
+            pan = new Point(pan.X + panOffset.X, pan.Y + panOffset.Y);
             pictureBox1.Invalidate();
+        }
+
+        private void PictureBox1_MouseWheel(object? sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                ZoomIn(e.Location);
+            }
+            if (e.Delta < 0)
+            {
+                ZoomOut(e.Location);
+            }
         }
 
         private void CalculateSize(DiagramClass element, Graphics g, out int sizeX, out int sizeY)
