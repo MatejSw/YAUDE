@@ -309,7 +309,7 @@
             // programVersionToolStripMenuItem
             // 
             programVersionToolStripMenuItem.Name = "programVersionToolStripMenuItem";
-            programVersionToolStripMenuItem.Size = new Size(180, 22);
+            programVersionToolStripMenuItem.Size = new Size(161, 22);
             programVersionToolStripMenuItem.Text = "Program Version";
             programVersionToolStripMenuItem.Click += programVersionToolStripMenuItem_Click;
             // 
@@ -324,6 +324,7 @@
             KeyPreview = true;
             Name = "Form1";
             Text = "YAUDE";
+            Resize += Form1_Resize;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             toolStrip_bottom.ResumeLayout(false);
             toolStrip_bottom.PerformLayout();

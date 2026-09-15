@@ -1,7 +1,7 @@
 [
   {
     "Name": "Person",
-    "Position": "133, 9",
+    "Position": "84, 135",
     "Size": "100, 100",
     "color": "LightBlue",
     "Attributes": [
@@ -17,14 +17,11 @@
       }
     ],
     "Methods": [],
-    "Associations": [
-      "Company"
-    ],
-    "Dependencies": []
+    "Relationships": []
   },
   {
     "Name": "Company",
-    "Position": "373, 77",
+    "Position": "361, 95",
     "Size": "162, 180",
     "color": "128, 128, 192",
     "Attributes": [
@@ -63,15 +60,58 @@
         "Visibility": "public"
       }
     ],
-    "Associations": [
-      "Person",
-      "Job"
-    ],
-    "Dependencies": []
+    "Relationships": [
+      {
+        "Target": {
+          "Name": "Person",
+          "Position": "84, 135",
+          "Size": "100, 100",
+          "color": "LightBlue",
+          "Attributes": [
+            {
+              "Name": "Name",
+              "Type": "string",
+              "Visibility": "public"
+            },
+            {
+              "Name": "Age",
+              "Type": "int",
+              "Visibility": "public"
+            }
+          ],
+          "Methods": [],
+          "Relationships": []
+        },
+        "Type": 0
+      },
+      {
+        "Target": {
+          "Name": "Job",
+          "Position": "385, -116",
+          "Size": "115, 100",
+          "color": "255, 128, 64",
+          "Attributes": [
+            {
+              "Name": "Payment",
+              "Type": "int",
+              "Visibility": "public"
+            },
+            {
+              "Name": "Difficulty",
+              "Type": "string",
+              "Visibility": "public"
+            }
+          ],
+          "Methods": [],
+          "Relationships": []
+        },
+        "Type": 0
+      }
+    ]
   },
   {
     "Name": "Job",
-    "Position": "391, -138",
+    "Position": "385, -116",
     "Size": "115, 100",
     "color": "255, 128, 64",
     "Attributes": [
@@ -87,19 +127,39 @@
       }
     ],
     "Methods": [],
-    "Associations": [],
-    "Dependencies": []
+    "Relationships": []
   },
   {
     "Name": "ItSpecialist",
-    "Position": "611, 12",
+    "Position": "669, -13",
     "Size": "100, 60",
     "color": "Yellow",
     "Attributes": [],
     "Methods": [],
-    "Associations": [],
-    "Dependencies": [
-      "Job"
+    "Relationships": [
+      {
+        "Target": {
+          "Name": "Job",
+          "Position": "385, -116",
+          "Size": "115, 100",
+          "color": "255, 128, 64",
+          "Attributes": [
+            {
+              "Name": "Payment",
+              "Type": "int",
+              "Visibility": "public"
+            },
+            {
+              "Name": "Difficulty",
+              "Type": "string",
+              "Visibility": "public"
+            }
+          ],
+          "Methods": [],
+          "Relationships": []
+        },
+        "Type": 3
+      }
     ]
   }
 ]

@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System.Drawing.Drawing2D;
+using YAUDE.Model;
 
 namespace YAUDE
 {
@@ -31,79 +32,26 @@ namespace YAUDE
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.TranslateTransform(pan.X + pictureBox1.Width/2, pan.Y + pictureBox1.Height / 2);
+            e.Graphics.TranslateTransform((int)(pan.X * ((double)zoomLevel / 100f) + pictureBox1.Width / 2), (int)(pan.Y * ((double)zoomLevel / 100f) + pictureBox1.Height / 2));
             e.Graphics.ScaleTransform(zoomLevel / 100f, zoomLevel / 100f);
 
 
             foreach (DiagramClass element in elements)
             {
-                int sizeX, sizeY;
-
-                CalculateSize(element, e.Graphics, out sizeX, out sizeY);
-
-                for (int i = 0; i < element.Associations.Count; i++)
-                {
-                    if (!elements.Select(x => x.Name).Contains(element.Associations[i]))
-                    {
-                        element.Associations.RemoveAt(i);
-                        i--;
-                        continue;
-                    }
-                    DiagramClass associatedClass = elements.First(x => x.Name == element.Associations[i]);
-                    e.Graphics.DrawLine(Pens.Black, element.Position.X + sizeX / 2, element.Position.Y + sizeY / 2, associatedClass.Position.X + associatedClass.Size.Width / 2, associatedClass.Position.Y + associatedClass.Size.Height / 2);
-                }
-                for (int i = 0; i < element.Dependencies.Count; i++)
-                {
-                    if (!elements.Select(x => x.Name).Contains(element.Dependencies[i]))
-                    {
-                        element.Dependencies.RemoveAt(i);
-                        i--;
-                        continue;
-                    }
-                    DiagramClass associatedClass = elements.First(x => x.Name == element.Dependencies[i]);
-                    AdjustableArrowCap bigArrow = new AdjustableArrowCap(10 * zoomLevel / 100f, 10 * zoomLevel / 100f);
-                    Pen pen = new Pen(Color.Black, 1);
-                    pen.CustomEndCap = bigArrow;
-                    e.Graphics.DrawLine(pen, element.Position.X + sizeX / 2, element.Position.Y + sizeY / 2, (int)((associatedClass.Position.X + associatedClass.Size.Width / 2) + (associatedClass.Size.Width / 2 * Math.Min(1, Math.Max(-1, (element.Position.X - associatedClass.Position.X) * 0.015)))), (int)((associatedClass.Position.Y + associatedClass.Size.Height / 2) + (associatedClass.Size.Height / 2 * Math.Min(1, Math.Max(-1, (element.Position.Y - associatedClass.Position.Y) * 0.015)))));
-                }
+                element.DrawRelationships(e.Graphics);
             }
 
             foreach (DiagramClass element in elements)
             {
-                int sizeX, sizeY;
-                CalculateSize(element, e.Graphics, out sizeX, out sizeY);
-
-                e.Graphics.FillRectangle(new SolidBrush(element.color), new Rectangle(element.Position, new Size(sizeX + 10, sizeY)));
-
-                e.Graphics.DrawRectangle(Pens.Black, new Rectangle(element.Position, new Size(sizeX + 10, sizeY)));
-
-                e.Graphics.DrawLine(Pens.Black, element.Position.X, element.Position.Y + 20, element.Position.X + sizeX + 10, element.Position.Y + 20);
-                e.Graphics.DrawLine(Pens.Black, element.Position.X, element.Position.Y + 40 + element.Attributes.Count * 20, element.Position.X + sizeX + 10, element.Position.Y + 40 + element.Attributes.Count * 20);
-
-                e.Graphics.DrawString(element.Name, new Font("Arial Black", 10), Brushes.Black, element.Position.X + 5, element.Position.Y);
-
-                for (int i = 0; i < element.Attributes.Count; i++)
-                {
-                    e.Graphics.DrawString($"{visibilitySymbols[element.Attributes[i].Visibility]}{element.Attributes[i].Name}: {element.Attributes[i].Type}", new Font("Arial", 10), Brushes.Black, element.Position.X + 5, element.Position.Y + 20 + i * 20);
-                }
-                for (int i = 0; i < element.Methods.Count; i++)
-                {
-                    if (element.Methods[i].ReturnType == "void")
-                    {
-                        e.Graphics.DrawString($"{visibilitySymbols[element.Methods[i].Visibility]}{element.Methods[i].Name}({element.Methods[i].Parameters})", new Font("Arial", 10), Brushes.Black, element.Position.X + 5, element.Position.Y + 40 + element.Attributes.Count * 20 + i * 20);
-                    }
-                    else
-                    {
-                        e.Graphics.DrawString($"{visibilitySymbols[element.Methods[i].Visibility]}{element.Methods[i].Name}({element.Methods[i].Parameters}): {element.Methods[i].ReturnType}", new Font("Arial", 10), Brushes.Black, element.Position.X + 5, element.Position.Y + 40 + element.Attributes.Count * 20 + i * 20);
-                    }
-                }
+                element.Draw(e.Graphics);
 
                 if (element == selectedElement)
                 {
-                    e.Graphics.DrawRectangle(Pens.Red, new Rectangle(element.Position, new Size(sizeX + 10, sizeY)));
+                    using (Pen pen = new Pen(Color.Red, 2))
+                    {
+                        e.Graphics.DrawRectangle(pen, new Rectangle(element.Position, element.Size));
+                    }
                 }
-
-                element.Size = new Size(sizeX + 10, sizeY);
             }
         }
 
@@ -126,7 +74,7 @@ namespace YAUDE
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             mouseDown = true;
-            Point location = new Point((int)(e.X / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(e.Y / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100)));
+            Point location = new Point((int)((e.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - pan.X), (int)((e.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - pan.Y));
 
             if (e.Button != MouseButtons.Middle)
             {
@@ -145,7 +93,7 @@ namespace YAUDE
 
             if (selectedTool == "cursor" && selectedElement != null && e.Button == MouseButtons.Left)
             {
-                mouseDownLocationFromElement = new Point((int)(e.X / ((double)zoomLevel / 100) - selectedElement.Position.X), (int)(e.Y / ((double)zoomLevel / 100) - selectedElement.Position.Y));
+                mouseDownLocationFromElement = new Point((int)((e.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - selectedElement.Position.X), (int)((e.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - selectedElement.Position.Y));
             }
 
             else if (selectedTool == "addElement" && e.Button == MouseButtons.Left)
@@ -155,7 +103,7 @@ namespace YAUDE
 
             if (selectedTool == "deleteElement" && selectedElement != null && e.Button == MouseButtons.Left)
             {
-                elements.Remove(selectedElement);
+                DeleteSelectedElement();
             }
 
             if (selectedTool == "pan" || e.Button == MouseButtons.Middle)
@@ -176,7 +124,7 @@ namespace YAUDE
                 }
                 if (targetElement != null && selectedElement != null && targetElement != selectedElement)
                 {
-                    targetElement.Associations.Add(selectedElement.Name);
+                    targetElement.Relationships.Add(new Relationship { Target = selectedElement, Type = RelationshipType.Association });
                     targetElement = null;
                     selectedElement = null;
                 }
@@ -194,7 +142,7 @@ namespace YAUDE
                 }
                 if (targetElement != null && selectedElement != null && targetElement != selectedElement)
                 {
-                    targetElement.Dependencies.Add(selectedElement.Name);
+                    targetElement.Relationships.Add(new Relationship { Target = selectedElement, Type = RelationshipType.Dependency });
                     targetElement = null;
                     selectedElement = null;
                 }
@@ -204,14 +152,10 @@ namespace YAUDE
             {
                 for (int i = 0; i < elements.Count; i++)
                 {
-                    if (elements[i].Associations.Contains(selectedElement.Name))
-                    {
-                        elements[i].Associations.Remove(selectedElement.Name);
-                    }
+                    elements[i].Relationships.RemoveAll(r => r.Target.Name == selectedElement.Name);
                 }
 
-                selectedElement.Associations.Clear();
-                selectedElement.Dependencies.Clear();
+                selectedElement.Relationships.Clear();
 
                 selectedElement = null;
             }
@@ -240,13 +184,15 @@ namespace YAUDE
         {
             if (mouseDown && selectedTool == "cursor" && selectedElement != null && e.Button == MouseButtons.Left)
             {
-                selectedElement.Position = new Point((int)(e.X / ((double)zoomLevel / 100) - mouseDownLocationFromElement.X), (int)(e.Y / ((double)zoomLevel / 100) - mouseDownLocationFromElement.Y));
+                selectedElement.Position = new Point((int)((e.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - mouseDownLocationFromElement.X), (int)((e.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - mouseDownLocationFromElement.Y));
                 pictureBox1.Invalidate(); // Refresh the PictureBox to show the moved class
             }
             if (mouseDown && (selectedTool == "pan" || e.Button == MouseButtons.Middle))
             {
                 Pan(e.Location);
             }
+
+            //toolStripLabel_status.Text = $"Mouse Position: {((int)((e.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)))}, {((int)((e.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100)))}";
         }
 
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -336,8 +282,7 @@ namespace YAUDE
 
                 deleteItem.Click += (s, args) =>
                 {
-                    elements.Remove(selectedElement);
-                    pictureBox1.Invalidate();
+                    DeleteSelectedElement();
                 };
             }
             else
@@ -346,16 +291,31 @@ namespace YAUDE
                 contextMenu.Items.Add(addItem);
                 addItem.Click += (s, args) =>
                 {
-                    addElement(new Point((int)(location.X / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(location.Y / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100))));
+                    addElement(new Point((int)((location.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)((location.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100))));
                 };
             }
 
             contextMenu.Show(pictureBox1, location);
         }
 
+        private void DeleteSelectedElement()
+        {
+            if (selectedElement != null)
+            {
+                elements.Remove(selectedElement);
+                for (int i = 0; i < elements.Count; i++)
+                {
+                    elements[i].Relationships.RemoveAll(r => r.Target.Name == selectedElement?.Name);
+                }
+                selectedElement = null;
+
+                pictureBox1.Invalidate();
+            }
+        }
+
         private void Pan(Point point)
         {
-            pan = new Point(panStart.X + (point.X - mouseStartPos.X), panStart.Y + (point.Y - mouseStartPos.Y));
+            pan = new Point((int)(panStart.X + (point.X - mouseStartPos.X) / ((double)zoomLevel / 100f)), (int)(panStart.Y + (point.Y - mouseStartPos.Y) / ((double)zoomLevel / 100f)));
             pictureBox1.Invalidate();
         }
 
@@ -369,20 +329,10 @@ namespace YAUDE
             ZoomOut(new Point(this.Width / 2, this.Height / 2));
         }
 
-        private Point ZoomPan(Point e)
-        {
-            Point mouse = new Point((int)(e.X / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(e.Y / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100)));
-            Point center = new Point((int)(this.Width / 2 / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)(this.Height / 2 / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100)));
-
-            return new Point(mouse.X - center.X, mouse.Y - center.Y);
-        }
-
         private void ZoomIn(Point location)
         {
             zoomLevel = Math.Min(zoomLevel + 10, 200); // Limit zoom level between 10% and 200%
             toolStripLabel_zoom.Text = $"{zoomLevel}%";
-            Point panOffset = ZoomPan(location);
-            pan = new Point(pan.X - (int)(panOffset.X / 0.2), pan.Y - (int)(panOffset.Y / 0.2));
             pictureBox1.Invalidate();
         }
 
@@ -390,8 +340,6 @@ namespace YAUDE
         {
             zoomLevel = Math.Max(zoomLevel - 10, 10); // Limit zoom level between 10% and 200%
             toolStripLabel_zoom.Text = $"{zoomLevel}%";
-            Point panOffset = ZoomPan(location);
-            pan = new Point(pan.X + panOffset.X, pan.Y + panOffset.Y);
             pictureBox1.Invalidate();
         }
 
@@ -407,31 +355,6 @@ namespace YAUDE
             }
         }
 
-        private void CalculateSize(DiagramClass element, Graphics g, out int sizeX, out int sizeY)
-        {
-            SizeF stringSize = g.MeasureString(element.Name, new Font("Arial Black", 10));
-            sizeX = (int)stringSize.Width;
-            sizeY = 60 + (element.Attributes.Count + element.Methods.Count) * 20;
-            for (int i = 0; i < element.Attributes.Count; i++)
-            {
-                SizeF attrSize = g.MeasureString($"{visibilitySymbols[element.Attributes[i].Visibility]}{element.Attributes[i].Name}: {element.Attributes[i].Type}", new Font("Arial", 10));
-                sizeX = Math.Max(sizeX, (int)attrSize.Width);
-            }
-            for (int i = 0; i < element.Methods.Count; i++)
-            {
-                SizeF methodSize = new SizeF(0, 0);
-                if (element.Methods[i].ReturnType == "void")
-                {
-                    methodSize = g.MeasureString($"{visibilitySymbols[element.Methods[i].Visibility]}{element.Methods[i].Name}({element.Methods[i].Parameters})", new Font("Arial", 10));
-                }
-                else
-                {
-                    methodSize = g.MeasureString($"{visibilitySymbols[element.Methods[i].Visibility]}{element.Methods[i].Name}({element.Methods[i].Parameters}): {element.Methods[i].ReturnType}", new Font("Arial", 10));
-                }
-                sizeX = Math.Max(sizeX, (int)methodSize.Width);
-            }
-        }
-
         private void AutoAssignAssociations(DiagramClass element)
         {
             bool autoAssign = false;
@@ -439,7 +362,7 @@ namespace YAUDE
             for (int i = 0; i < element.Attributes.Count; i++)
             {
                 string attributeType = element.Attributes[i].Type.Replace("List<", "").Replace(">", "");
-                if (elements.Select(x => x.Name).Contains(attributeType) && !element.Associations.Contains(elements.Select(x => x.Name).First(x => x == attributeType)))
+                if (elements.Select(x => x.Name).Contains(attributeType) && !element.Relationships.Any(r => r.Target.Name == attributeType))
                 {
                     if (!autoAssign)
                     {
@@ -454,7 +377,7 @@ namespace YAUDE
                     }
                     if (autoAssign)
                     {
-                        element.Associations.Add(elements.Select(x => x.Name).First(x => x == attributeType));
+                        element.Relationships.Add(new Relationship { Target = elements.First(x => x.Name == attributeType), Type = RelationshipType.Association });
                     }
                 }
             }
@@ -462,7 +385,7 @@ namespace YAUDE
             for (int i = 0; i < element.Methods.Count; i++)
             {
                 string methodType = element.Methods[i].ReturnType.Replace("List<", "").Replace(">", "");
-                if (elements.Select(x => x.Name).Contains(methodType) && !element.Associations.Contains(elements.Select(x => x.Name).First(x => x == methodType)))
+                if (elements.Select(x => x.Name).Contains(methodType) && !element.Relationships.Any(r => r.Target.Name == methodType))
                 {
                     if (!autoAssign)
                     {
@@ -477,7 +400,7 @@ namespace YAUDE
                     }
                     if (autoAssign)
                     {
-                        element.Associations.Add(elements.Select(x => x.Name).First(x => x == methodType));
+                        element.Relationships.Add(new Relationship { Target = elements.First(x => x.Name == methodType), Type = RelationshipType.Association });
                     }
                 }
             }
@@ -541,6 +464,22 @@ namespace YAUDE
                 deselectTool();
                 toolStripButton_cursor.Checked = true;
                 selectedTool = "cursor";
+
+                for (int i = 0; i < elements.Count; i++)
+                {
+                    List<Relationship> temp = elements[i].Relationships;
+
+                    elements[i].Relationships = new List<Relationship>();
+                    for (int j = 0; j < temp.Count; j++)
+                    {
+                        DiagramClass targetElement = elements.FirstOrDefault(x => x.Name == temp[j].Target.Name);
+                        if (targetElement != null)
+                        {
+                            elements[i].Relationships.Add(new Relationship { Target = targetElement, Type = temp[j].Type });
+                        }
+                    }
+                }
+
                 pictureBox1.Invalidate();
                 this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
                 pan = new Point(0, 0);
@@ -577,7 +516,7 @@ namespace YAUDE
 
             Dictionary<Keys, Action> shortcutActions = new Dictionary<Keys, Action>
             {
-                { Keys.Delete, () => { if (selectedElement != null) { elements.Remove(selectedElement); selectedElement = null; pictureBox1.Invalidate(); } } },
+                { Keys.Delete, () => DeleteSelectedElement() },
                 { (Keys.Control | Keys.S), () => Save() },
                 { (Keys.Control | Keys.Shift | Keys.S), () => SaveAs() },
                 { (Keys.Control | Keys.N), () => New() },
@@ -611,6 +550,11 @@ namespace YAUDE
         {
             ProgramVersionForm versionForm = new ProgramVersionForm();
             versionForm.ShowDialog();
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            pictureBox1.Invalidate();
         }
     }
 }

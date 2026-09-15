@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace YAUDE
+namespace YAUDE.Model
 {
-    public class Attribute
+    public class Method
     {
         public string Name { get; set; }
-        public string Type { get; set; }
+        public string ReturnType { get; set; }
+        public string Parameters { get; set; }
         public string Visibility { get; set; }
     }
 }

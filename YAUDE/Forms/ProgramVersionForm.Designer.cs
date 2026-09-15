@@ -52,7 +52,7 @@
             label1.Name = "label1";
             label1.Size = new Size(122, 28);
             label1.TabIndex = 1;
-            label1.Text = "Version 0.1.3";
+            label1.Text = "Version 0.2.0";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label2

@@ -5,22 +5,23 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using YAUDE.Model;
 
 namespace YAUDE
 {
     public partial class EditClassForm : Form
     {
         public DiagramClass diagramClass;
-        private BindingList<Attribute> attributeBindingList;
-        private BindingList<Method> methodBindingList;
+        private BindingList<YAUDE.Model.Attribute> attributeBindingList;
+        private BindingList<YAUDE.Model.Method> methodBindingList;
 
         public EditClassForm(DiagramClass element)
         {
             InitializeComponent();
             diagramClass = element;
 
-            attributeBindingList = new BindingList<Attribute>(diagramClass.Attributes);
-            methodBindingList = new BindingList<Method>(diagramClass.Methods);
+            attributeBindingList = new BindingList<YAUDE.Model.Attribute>(diagramClass.Attributes);
+            methodBindingList = new BindingList<YAUDE.Model.Method>(diagramClass.Methods);
 
             dataGridView_attributes.DataSource = attributeBindingList;
             dataGridView_methods.DataSource = methodBindingList;
@@ -34,14 +35,14 @@ namespace YAUDE
 
         private void button_addAttribute_Click(object sender, EventArgs e)
         {
-            attributeBindingList.Add(new Attribute { Name = "NewAttribute", Type = "string", Visibility = "public" });
+            attributeBindingList.Add(new YAUDE.Model.Attribute { Name = "NewAttribute", Type = "string", Visibility = "public" });
             dataGridView_attributes.Focus();
             button_deleteAttribute.Enabled = attributeBindingList.Count > 0;
         }
 
         private void button_addMethod_Click(object sender, EventArgs e)
         {
-            methodBindingList.Add(new Method { Name = "NewMethod", ReturnType = "void", Visibility = "public" });
+            methodBindingList.Add(new YAUDE.Model.Method { Name = "NewMethod", ReturnType = "void", Visibility = "public" });
             dataGridView_methods.Focus();
             button_deleteMethod.Enabled = methodBindingList.Count > 0;
         }
@@ -58,7 +59,7 @@ namespace YAUDE
             {
                 this.DialogResult = DialogResult.OK;
                 diagramClass.Name = textBox_className.Text;
-                diagramClass.Attributes = new List<Attribute>(attributeBindingList);
+                diagramClass.Attributes = new List<YAUDE.Model.Attribute>(attributeBindingList);
                 diagramClass.Methods = new List<Method>(methodBindingList);
                 this.Close();
             }
@@ -102,7 +103,7 @@ namespace YAUDE
             List<string> visibility = new List<string> { "public", "private", "protected", "internal" };
             for (int i = 0; i < attributeBindingList.Count; i++)
             {
-                Attribute attribute = attributeBindingList[i];
+                YAUDE.Model.Attribute attribute = attributeBindingList[i];
                 if (!visibility.Contains(attribute.Visibility))
                 {
                     e.Cancel = true;
