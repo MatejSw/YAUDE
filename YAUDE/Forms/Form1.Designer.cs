@@ -39,8 +39,8 @@
             toolStripButton1 = new ToolStripButton();
             toolStripSeparator3 = new ToolStripSeparator();
             toolStripLabel_status = new ToolStripLabel();
-            toolStripButton_addAssociation = new ToolStripButton();
-            toolStripButton4 = new ToolStripButton();
+            toolStripButton_addAssociation = new ToolStripSplitButton();
+            aaaToolStripMenuItem = new ToolStripMenuItem();
             toolStripButton5 = new ToolStripButton();
             toolStripSeparator5 = new ToolStripSeparator();
             toolStripButton_zoomIn = new ToolStripButton();
@@ -81,7 +81,7 @@
             // toolStrip_bottom
             // 
             toolStrip_bottom.Dock = DockStyle.Bottom;
-            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton1, toolStripSeparator3, toolStripLabel_status, toolStripButton_addAssociation, toolStripButton4, toolStripButton5, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
+            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton1, toolStripSeparator3, toolStripLabel_status, toolStripButton_addAssociation, toolStripButton5, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
             toolStrip_bottom.Location = new Point(0, 425);
             toolStrip_bottom.Name = "toolStrip_bottom";
             toolStrip_bottom.Size = new Size(800, 25);
@@ -158,24 +158,24 @@
             // toolStripButton_addAssociation
             // 
             toolStripButton_addAssociation.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton_addAssociation.DropDownItems.AddRange(new ToolStripItem[] { aaaToolStripMenuItem });
             toolStripButton_addAssociation.Image = Properties.Resources.addAssociation;
             toolStripButton_addAssociation.ImageTransparentColor = Color.Magenta;
             toolStripButton_addAssociation.Name = "toolStripButton_addAssociation";
-            toolStripButton_addAssociation.Size = new Size(23, 22);
+            toolStripButton_addAssociation.Size = new Size(32, 22);
             toolStripButton_addAssociation.Tag = "addAssociation";
             toolStripButton_addAssociation.Text = "Add Association (S)";
-            toolStripButton_addAssociation.Click += toolStripButton_Click;
+            toolStripButton_addAssociation.Click += toolStripButton_split_Click;
             // 
-            // toolStripButton4
+            // aaaToolStripMenuItem
             // 
-            toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton4.Image = Properties.Resources.addDependency;
-            toolStripButton4.ImageTransparentColor = Color.Magenta;
-            toolStripButton4.Name = "toolStripButton4";
-            toolStripButton4.Size = new Size(23, 22);
-            toolStripButton4.Tag = "addDependency";
-            toolStripButton4.Text = "Add Dependency (E)";
-            toolStripButton4.Click += toolStripButton_Click;
+            aaaToolStripMenuItem.Image = Properties.Resources.addDependency;
+            aaaToolStripMenuItem.Name = "aaaToolStripMenuItem";
+            aaaToolStripMenuItem.ShortcutKeyDisplayString = "E";
+            aaaToolStripMenuItem.Size = new Size(180, 22);
+            aaaToolStripMenuItem.Tag = "addDependency";
+            aaaToolStripMenuItem.Text = "Dependency";
+            aaaToolStripMenuItem.Click += ToolStripMenuItem_Click;
             // 
             // toolStripButton5
             // 
@@ -359,11 +359,11 @@
         private ToolStripButton toolStripButton_zoomOut;
         private ToolStripLabel toolStripLabel_zoom;
         private ToolStripSeparator toolStripSeparator3;
-        private ToolStripButton toolStripButton_addAssociation;
-        private ToolStripButton toolStripButton4;
         private ToolStripButton toolStripButton5;
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripDropDownButton toolStripDropDownButton3;
         private ToolStripMenuItem programVersionToolStripMenuItem;
+        private ToolStripSplitButton toolStripButton_addAssociation;
+        private ToolStripMenuItem aaaToolStripMenuItem;
     }
 }

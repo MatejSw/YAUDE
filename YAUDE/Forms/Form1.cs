@@ -17,12 +17,12 @@ namespace YAUDE
         private bool mouseDown = false;
         private DiagramClass selectedElement = null;
         private DiagramClass targetElement = null;
-        private Dictionary<string, string> visibilitySymbols = new Dictionary<string, string>
+        private Dictionary<Visibility, string> visibilitySymbols = new Dictionary<Visibility, string>
         {
-            { "public", "+" },
-            { "private", "-" },
-            { "protected", "#" },
-            { "internal", "~" }
+            { Visibility.Public, "+" },
+            { Visibility.Private, "-" },
+            { Visibility.Protected, "#" },
+            { Visibility.Internal, "~" }
         };
         public Form1()
         {
@@ -214,7 +214,7 @@ namespace YAUDE
         {
             if (selectedElement != null)
             {
-                EditClassForm editForm = new EditClassForm(selectedElement);
+                EditClassForm editForm = new EditClassForm(selectedElement, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
                 if (editForm.ShowDialog() == DialogResult.OK)
                 {
                     selectedElement = editForm.diagramClass;
@@ -230,7 +230,7 @@ namespace YAUDE
         {
             DiagramClass newClass = new DiagramClass
             {
-                Name = "NewClass",
+                Name = $"NewClass{(elements.Count == 0 ? "" : elements.Count + 1)}",
                 Position = location,
                 color = Color.LightBlue,
             };
@@ -253,7 +253,7 @@ namespace YAUDE
 
                 editItem.Click += (s, args) =>
                 {
-                    EditClassForm editForm = new EditClassForm(selectedElement);
+                    EditClassForm editForm = new EditClassForm(selectedElement, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
                     if (editForm.ShowDialog() == DialogResult.OK)
                     {
                         selectedElement = editForm.diagramClass;
@@ -535,6 +535,11 @@ namespace YAUDE
                         selectedTool = toolName;
                         break;
                     }
+                    else if (item is ToolStripSplitButton splitButton && splitButton.Tag.ToString() == toolName)
+                    {
+                        selectedTool = toolName;
+                        break;
+                    }
                 }
             }
 
@@ -555,6 +560,18 @@ namespace YAUDE
         private void Form1_Resize(object sender, EventArgs e)
         {
             pictureBox1.Invalidate();
+        }
+
+        private void toolStripButton_split_Click(object sender, EventArgs e)
+        {
+            deselectTool();
+            selectedTool = ((ToolStripSplitButton)sender).Tag.ToString();
+        }
+
+        private void ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            deselectTool();
+            selectedTool = ((ToolStripMenuItem)sender).Tag.ToString();
         }
     }
 }

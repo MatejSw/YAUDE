@@ -36,24 +36,27 @@ namespace YAUDE.Model
                 Point center = new Point(Position.X + Size.Width / 2, Position.Y + Size.Height / 2);
 
                 Pen endLine = new Pen(Color.Black, 1);
+                Pen regLine = new Pen(Color.Black, 1);
 
                 if(relationship.Type == RelationshipType.Dependency)
                 {
-                    endLine.CustomEndCap = new AdjustableArrowCap(5, 5);
+                    regLine.DashStyle = DashStyle.Dash;
+                    endLine.CustomEndCap = new AdjustableArrowCap(10,10);
+                    endLine.DashStyle = DashStyle.Dash;
                 }
 
                 if (Math.Abs(vector.X) > Math.Abs(vector.Y))
                 {
                     if (vector.X > 0)
                     {
-                        g.DrawLine(Pens.Black, center, new Point(center.X + vector.X / 2, center.Y));
-                        g.DrawLine(Pens.Black, new Point(center.X + vector.X / 2, center.Y), new Point(center.X + vector.X / 2, center.Y + vector.Y));
+                        g.DrawLine(regLine, center, new Point(center.X + vector.X / 2, center.Y));
+                        g.DrawLine(regLine, new Point(center.X + vector.X / 2, center.Y), new Point(center.X + vector.X / 2, center.Y + vector.Y));
                         g.DrawLine(endLine, center.X + vector.X / 2, center.Y + vector.Y, relationship.Target.Position.X, relationship.Target.Position.Y + relationship.Target.Size.Height / 2);
                     }
                     else
                     {
-                        g.DrawLine(Pens.Black, center, new Point(center.X + vector.X / 2, center.Y));
-                        g.DrawLine(Pens.Black, new Point(center.X + vector.X / 2, center.Y), new Point(center.X + vector.X / 2, center.Y + vector.Y));
+                        g.DrawLine(regLine, center, new Point(center.X + vector.X / 2, center.Y));
+                        g.DrawLine(regLine, new Point(center.X + vector.X / 2, center.Y), new Point(center.X + vector.X / 2, center.Y + vector.Y));
                         g.DrawLine(endLine, center.X + vector.X / 2, center.Y + vector.Y, relationship.Target.Position.X + relationship.Target.Size.Width, relationship.Target.Position.Y + relationship.Target.Size.Height / 2);
                     }
                 }
@@ -61,14 +64,14 @@ namespace YAUDE.Model
                 {
                     if (vector.Y > 0)
                     {
-                        g.DrawLine(Pens.Black, center, new Point(center.X, center.Y + vector.Y / 2));
-                        g.DrawLine(Pens.Black, new Point(center.X, center.Y + vector.Y / 2), new Point(center.X + vector.X, center.Y + vector.Y / 2));
+                        g.DrawLine(regLine, center, new Point(center.X, center.Y + vector.Y / 2));
+                        g.DrawLine(regLine, new Point(center.X, center.Y + vector.Y / 2), new Point(center.X + vector.X, center.Y + vector.Y / 2));
                         g.DrawLine(endLine, center.X + vector.X, center.Y + vector.Y / 2, relationship.Target.Position.X + relationship.Target.Size.Width / 2, relationship.Target.Position.Y);
                     }
                     else
                     {
-                        g.DrawLine(Pens.Black, center, new Point(center.X, center.Y + vector.Y / 2));
-                        g.DrawLine(Pens.Black, new Point(center.X, center.Y + vector.Y / 2), new Point(center.X + vector.X, center.Y + vector.Y / 2));
+                        g.DrawLine(regLine, center, new Point(center.X, center.Y + vector.Y / 2));
+                        g.DrawLine(regLine, new Point(center.X, center.Y + vector.Y / 2), new Point(center.X + vector.X, center.Y + vector.Y / 2));
                         g.DrawLine(endLine, center.X + vector.X, center.Y + vector.Y / 2, relationship.Target.Position.X + relationship.Target.Size.Width / 2, relationship.Target.Position.Y + relationship.Target.Size.Height);
                     }
                 }
@@ -77,12 +80,12 @@ namespace YAUDE.Model
 
         public void Draw(Graphics g)
         {
-            Dictionary<string, string> visibilitySymbols = new Dictionary<string, string>
+            Dictionary<Visibility, string> visibilitySymbols = new Dictionary<Visibility, string>
             {
-                { "public", "+" },
-                { "private", "-" },
-                { "protected", "#" },
-                { "internal", "~" }
+                { Visibility.Public, "+" },
+                { Visibility.Private, "-" },
+                { Visibility.Protected, "#" },
+                { Visibility.Internal, "~" }
             };
 
             CalculateSize(g);
@@ -118,12 +121,12 @@ namespace YAUDE.Model
         {
             int sizeX, sizeY;
 
-            Dictionary<string, string> visibilitySymbols = new Dictionary<string, string>
+            Dictionary<Visibility, string> visibilitySymbols = new Dictionary<Visibility, string>
             {
-                { "public", "+" },
-                { "private", "-" },
-                { "protected", "#" },
-                { "internal", "~" }
+                { Visibility.Public, "+" },
+                { Visibility.Private, "-" },
+                { Visibility.Protected, "#" },
+                { Visibility.Internal, "~" }
             };
 
             SizeF stringSize = g.MeasureString(Name, new Font("Arial Black", 10));
