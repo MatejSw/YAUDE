@@ -21,26 +21,24 @@ namespace YAUDE
             InitializeComponent();
             diagramClass = element;
 
+            //DataGridViewComboBoxColumn visibilityColumn = new DataGridViewComboBoxColumn();
+            //visibilityColumn.HeaderText = "Visibility";
+            //visibilityColumn.Items.AddRange(["Public", "Private", "Protected", "Internal"]);
+
+            //dataGridView_attributes.Columns.Add(visibilityColumn);
+
+            //DataGridViewComboBoxColumn visibilityColumn2 = new DataGridViewComboBoxColumn();
+            //visibilityColumn2.HeaderText = "Visibility";
+            //visibilityColumn2.Items.AddRange(["Public", "Private", "Protected", "Internal"]);
+
+            //dataGridView_methods.Columns.Add(visibilityColumn2);
+
             attributeBindingList = new BindingList<YAUDE.Model.Attribute>(diagramClass.Attributes);
             methodBindingList = new BindingList<YAUDE.Model.Method>(diagramClass.Methods);
 
             dataGridView_attributes.DataSource = attributeBindingList;
             dataGridView_methods.DataSource = methodBindingList;
             textBox_className.Text = diagramClass.Name;
-
-            DataGridViewComboBoxColumn visibilityColumn = new DataGridViewComboBoxColumn();
-            visibilityColumn.HeaderText = "Visibility";
-            visibilityColumn.Items.AddRange(["Public", "Private", "Protected", "Internal"]);
-
-            dataGridView_attributes.Columns[2].Visible = false;
-            dataGridView_attributes.Columns.Insert(2, visibilityColumn);
-
-            DataGridViewComboBoxColumn visibilityColumn2 = new DataGridViewComboBoxColumn();
-            visibilityColumn2.HeaderText = "Visibility";
-            visibilityColumn2.Items.AddRange(["Public", "Private", "Protected", "Internal"]);
-
-            dataGridView_methods.Columns[3].Visible = false;
-            dataGridView_methods.Columns.Insert(3, visibilityColumn2);
 
             button_deleteAttribute.Enabled = attributeBindingList.Count > 0;
             button_deleteMethod.Enabled = methodBindingList.Count > 0;

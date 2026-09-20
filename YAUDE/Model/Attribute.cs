@@ -9,6 +9,7 @@ namespace YAUDE.Model
     {
         public string Name { get; set; }
         public string Type { get; set; }
+        [Column("Visibility")]
         public Visibility Visibility { get; set; }
     }
 }

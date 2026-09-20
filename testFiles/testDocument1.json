@@ -8,12 +8,12 @@
       {
         "Name": "Name",
         "Type": "string",
-        "Visibility": "public"
+        "Visibility": 1
       },
       {
         "Name": "Age",
         "Type": "int",
-        "Visibility": "public"
+        "Visibility": 1
       }
     ],
     "Methods": [],
@@ -28,22 +28,22 @@
       {
         "Name": "Workers",
         "Type": "List<Person>",
-        "Visibility": "public"
+        "Visibility": 1
       },
       {
         "Name": "Manager",
         "Type": "Person",
-        "Visibility": "public"
+        "Visibility": 1
       },
       {
         "Name": "CompanyName",
         "Type": "string",
-        "Visibility": "public"
+        "Visibility": 1
       },
       {
         "Name": "CompanyJob",
         "Type": "Job",
-        "Visibility": "public"
+        "Visibility": 1
       }
     ],
     "Methods": [
@@ -51,13 +51,13 @@
         "Name": "Hire",
         "ReturnType": "void",
         "Parameters": "Person",
-        "Visibility": "public"
+        "Visibility": 1
       },
       {
         "Name": "Fire",
         "ReturnType": "void",
         "Parameters": "Person",
-        "Visibility": "public"
+        "Visibility": 1
       }
     ],
     "Relationships": [
@@ -71,12 +71,12 @@
             {
               "Name": "Name",
               "Type": "string",
-              "Visibility": "public"
+              "Visibility": 1
             },
             {
               "Name": "Age",
               "Type": "int",
-              "Visibility": "public"
+              "Visibility": 1
             }
           ],
           "Methods": [],
@@ -94,12 +94,12 @@
             {
               "Name": "Payment",
               "Type": "int",
-              "Visibility": "public"
+              "Visibility": 1
             },
             {
               "Name": "Difficulty",
               "Type": "string",
-              "Visibility": "public"
+              "Visibility": 1
             }
           ],
           "Methods": [],
@@ -118,12 +118,12 @@
       {
         "Name": "Payment",
         "Type": "int",
-        "Visibility": "public"
+        "Visibility": 1
       },
       {
         "Name": "Difficulty",
         "Type": "string",
-        "Visibility": "public"
+        "Visibility": 1
       }
     ],
     "Methods": [],
@@ -147,18 +147,18 @@
             {
               "Name": "Payment",
               "Type": "int",
-              "Visibility": "public"
+              "Visibility": 1
             },
             {
               "Name": "Difficulty",
               "Type": "string",
-              "Visibility": "public"
+              "Visibility": 1
             }
           ],
           "Methods": [],
           "Relationships": []
         },
-        "Type": 3
+        "Type": 1
       }
     ]
   }

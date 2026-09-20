@@ -39,8 +39,14 @@
             toolStripButton1 = new ToolStripButton();
             toolStripSeparator3 = new ToolStripSeparator();
             toolStripLabel_status = new ToolStripLabel();
-            toolStripButton_addAssociation = new ToolStripSplitButton();
+            toolStripButton_addRelationship = new ToolStripButton();
+            toolStripButton_relationships = new ToolStripDropDownButton();
+            associationToolStripMenuItem = new ToolStripMenuItem();
+            inheritanceToolStripMenuItem = new ToolStripMenuItem();
+            realizationToolStripMenuItem = new ToolStripMenuItem();
             aaaToolStripMenuItem = new ToolStripMenuItem();
+            aggregationToolStripMenuItem = new ToolStripMenuItem();
+            compositionToolStripMenuItem = new ToolStripMenuItem();
             toolStripButton5 = new ToolStripButton();
             toolStripSeparator5 = new ToolStripSeparator();
             toolStripButton_zoomIn = new ToolStripButton();
@@ -81,7 +87,7 @@
             // toolStrip_bottom
             // 
             toolStrip_bottom.Dock = DockStyle.Bottom;
-            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton1, toolStripSeparator3, toolStripLabel_status, toolStripButton_addAssociation, toolStripButton5, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
+            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton1, toolStripSeparator3, toolStripLabel_status, toolStripButton_addRelationship, toolStripButton_relationships, toolStripButton5, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
             toolStrip_bottom.Location = new Point(0, 425);
             toolStrip_bottom.Name = "toolStrip_bottom";
             toolStrip_bottom.Size = new Size(800, 25);
@@ -155,27 +161,89 @@
             toolStripLabel_status.Name = "toolStripLabel_status";
             toolStripLabel_status.Size = new Size(0, 22);
             // 
-            // toolStripButton_addAssociation
+            // toolStripButton_addRelationship
             // 
-            toolStripButton_addAssociation.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton_addAssociation.DropDownItems.AddRange(new ToolStripItem[] { aaaToolStripMenuItem });
-            toolStripButton_addAssociation.Image = Properties.Resources.addAssociation;
-            toolStripButton_addAssociation.ImageTransparentColor = Color.Magenta;
-            toolStripButton_addAssociation.Name = "toolStripButton_addAssociation";
-            toolStripButton_addAssociation.Size = new Size(32, 22);
-            toolStripButton_addAssociation.Tag = "addAssociation";
-            toolStripButton_addAssociation.Text = "Add Association (S)";
-            toolStripButton_addAssociation.Click += toolStripButton_split_Click;
+            toolStripButton_addRelationship.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton_addRelationship.Image = Properties.Resources.addAssociation;
+            toolStripButton_addRelationship.ImageTransparentColor = Color.Magenta;
+            toolStripButton_addRelationship.Name = "toolStripButton_addRelationship";
+            toolStripButton_addRelationship.Size = new Size(23, 22);
+            toolStripButton_addRelationship.Tag = "addAssociation";
+            toolStripButton_addRelationship.Text = "Association";
+            toolStripButton_addRelationship.Click += toolStripButton_split_Click;
+            // 
+            // toolStripButton_relationships
+            // 
+            toolStripButton_relationships.BackColor = SystemColors.Control;
+            toolStripButton_relationships.DisplayStyle = ToolStripItemDisplayStyle.None;
+            toolStripButton_relationships.DropDownItems.AddRange(new ToolStripItem[] { associationToolStripMenuItem, inheritanceToolStripMenuItem, realizationToolStripMenuItem, aaaToolStripMenuItem, aggregationToolStripMenuItem, compositionToolStripMenuItem });
+            toolStripButton_relationships.Image = Properties.Resources.addAssociation;
+            toolStripButton_relationships.ImageTransparentColor = Color.Magenta;
+            toolStripButton_relationships.Name = "toolStripButton_relationships";
+            toolStripButton_relationships.Size = new Size(13, 22);
+            toolStripButton_relationships.Tag = "addAssociation";
+            toolStripButton_relationships.Text = "Association";
+            toolStripButton_relationships.ToolTipText = "Association";
+            // 
+            // associationToolStripMenuItem
+            // 
+            associationToolStripMenuItem.Image = Properties.Resources.addAssociation;
+            associationToolStripMenuItem.Name = "associationToolStripMenuItem";
+            associationToolStripMenuItem.ShortcutKeyDisplayString = "S";
+            associationToolStripMenuItem.Size = new Size(156, 22);
+            associationToolStripMenuItem.Tag = "addAssociation";
+            associationToolStripMenuItem.Text = "Association";
+            associationToolStripMenuItem.Click += ToolStripMenuItem_Click;
+            // 
+            // inheritanceToolStripMenuItem
+            // 
+            inheritanceToolStripMenuItem.Image = Properties.Resources.addInharitance;
+            inheritanceToolStripMenuItem.Name = "inheritanceToolStripMenuItem";
+            inheritanceToolStripMenuItem.ShortcutKeyDisplayString = "I";
+            inheritanceToolStripMenuItem.Size = new Size(156, 22);
+            inheritanceToolStripMenuItem.Tag = "addInheritance";
+            inheritanceToolStripMenuItem.Text = "Inheritance";
+            inheritanceToolStripMenuItem.Click += ToolStripMenuItem_Click;
+            // 
+            // realizationToolStripMenuItem
+            // 
+            realizationToolStripMenuItem.Image = Properties.Resources.addRealization;
+            realizationToolStripMenuItem.Name = "realizationToolStripMenuItem";
+            realizationToolStripMenuItem.ShortcutKeyDisplayString = "T";
+            realizationToolStripMenuItem.Size = new Size(156, 22);
+            realizationToolStripMenuItem.Tag = "addRealization";
+            realizationToolStripMenuItem.Text = "Realization";
+            realizationToolStripMenuItem.Click += ToolStripMenuItem_Click;
             // 
             // aaaToolStripMenuItem
             // 
             aaaToolStripMenuItem.Image = Properties.Resources.addDependency;
             aaaToolStripMenuItem.Name = "aaaToolStripMenuItem";
             aaaToolStripMenuItem.ShortcutKeyDisplayString = "E";
-            aaaToolStripMenuItem.Size = new Size(180, 22);
+            aaaToolStripMenuItem.Size = new Size(156, 22);
             aaaToolStripMenuItem.Tag = "addDependency";
             aaaToolStripMenuItem.Text = "Dependency";
             aaaToolStripMenuItem.Click += ToolStripMenuItem_Click;
+            // 
+            // aggregationToolStripMenuItem
+            // 
+            aggregationToolStripMenuItem.Image = Properties.Resources.addAggregation;
+            aggregationToolStripMenuItem.Name = "aggregationToolStripMenuItem";
+            aggregationToolStripMenuItem.ShortcutKeyDisplayString = "Q";
+            aggregationToolStripMenuItem.Size = new Size(156, 22);
+            aggregationToolStripMenuItem.Tag = "addAggregation";
+            aggregationToolStripMenuItem.Text = "Aggregation";
+            aggregationToolStripMenuItem.Click += ToolStripMenuItem_Click;
+            // 
+            // compositionToolStripMenuItem
+            // 
+            compositionToolStripMenuItem.Image = Properties.Resources.addComposition;
+            compositionToolStripMenuItem.Name = "compositionToolStripMenuItem";
+            compositionToolStripMenuItem.ShortcutKeyDisplayString = "F";
+            compositionToolStripMenuItem.Size = new Size(156, 22);
+            compositionToolStripMenuItem.Tag = "addComposition";
+            compositionToolStripMenuItem.Text = "Composition";
+            compositionToolStripMenuItem.Click += ToolStripMenuItem_Click;
             // 
             // toolStripButton5
             // 
@@ -288,8 +356,9 @@
             // generateToolStripMenuItem
             // 
             generateToolStripMenuItem.Name = "generateToolStripMenuItem";
-            generateToolStripMenuItem.Size = new Size(207, 22);
-            generateToolStripMenuItem.Text = "Generate (Coming soon!)";
+            generateToolStripMenuItem.Size = new Size(180, 22);
+            generateToolStripMenuItem.Text = "Generate";
+            generateToolStripMenuItem.Click += generateToolStripMenuItem_Click;
             // 
             // toolStripSeparator6
             // 
@@ -363,7 +432,13 @@
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripDropDownButton toolStripDropDownButton3;
         private ToolStripMenuItem programVersionToolStripMenuItem;
-        private ToolStripSplitButton toolStripButton_addAssociation;
+        private ToolStripDropDownButton toolStripButton_relationships;
+        private ToolStripMenuItem associationToolStripMenuItem;
+        private ToolStripMenuItem inheritanceToolStripMenuItem;
+        private ToolStripMenuItem realizationToolStripMenuItem;
         private ToolStripMenuItem aaaToolStripMenuItem;
+        private ToolStripMenuItem aggregationToolStripMenuItem;
+        private ToolStripMenuItem compositionToolStripMenuItem;
+        private ToolStripButton toolStripButton_addRelationship;
     }
 }

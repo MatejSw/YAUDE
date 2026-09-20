@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.Drawing.Drawing2D;
 using YAUDE.Model;
+using YAUDE.Services;
 
 namespace YAUDE
 {
@@ -24,6 +25,7 @@ namespace YAUDE
             { Visibility.Protected, "#" },
             { Visibility.Internal, "~" }
         };
+        private RelationshipType relationship = RelationshipType.Association;
         public Form1()
         {
             InitializeComponent();
@@ -38,7 +40,7 @@ namespace YAUDE
 
             foreach (DiagramClass element in elements)
             {
-                element.DrawRelationships(e.Graphics);
+                element.DrawRelationships(e.Graphics, zoomLevel);
             }
 
             foreach (DiagramClass element in elements)
@@ -112,7 +114,7 @@ namespace YAUDE
                 panStart = pan;
             }
 
-            if (selectedTool == "addAssociation" && e.Button == MouseButtons.Left)
+            if (selectedTool == "addRelationship" && e.Button == MouseButtons.Left)
             {
                 if (selectedElement == null)
                 {
@@ -124,25 +126,7 @@ namespace YAUDE
                 }
                 if (targetElement != null && selectedElement != null && targetElement != selectedElement)
                 {
-                    targetElement.Relationships.Add(new Relationship { Target = selectedElement, Type = RelationshipType.Association });
-                    targetElement = null;
-                    selectedElement = null;
-                }
-            }
-
-            if (selectedTool == "addDependency" && e.Button == MouseButtons.Left)
-            {
-                if (selectedElement == null)
-                {
-                    targetElement = null;
-                }
-                else if (targetElement == null)
-                {
-                    targetElement = selectedElement;
-                }
-                if (targetElement != null && selectedElement != null && targetElement != selectedElement)
-                {
-                    targetElement.Relationships.Add(new Relationship { Target = selectedElement, Type = RelationshipType.Dependency });
+                    targetElement.Relationships.Add(new Relationship { Target = selectedElement, Type = relationship });
                     targetElement = null;
                     selectedElement = null;
                 }
@@ -509,9 +493,17 @@ namespace YAUDE
                 { "addElement", Keys.A },
                 { "deleteElement", Keys.D },
                 { "pan", Keys.P },
-                { "addAssociation", Keys.S },
-                { "addDependency", Keys.E },
                 { "removeRelationships", Keys.R }
+            };
+
+            Dictionary<Keys, string> relationshipShortcuts = new Dictionary<Keys, string>()
+            {
+                { Keys.S, "addAssociation" },
+                { Keys.I, "addInheritance" },
+                { Keys.T, "addRealization" },
+                { Keys.E, "addDependency" },
+                { Keys.Q, "addAggregation" },
+                { Keys.F, "addComposition" }
             };
 
             Dictionary<Keys, Action> shortcutActions = new Dictionary<Keys, Action>
@@ -535,9 +527,18 @@ namespace YAUDE
                         selectedTool = toolName;
                         break;
                     }
-                    else if (item is ToolStripSplitButton splitButton && splitButton.Tag.ToString() == toolName)
+                }
+            }
+
+            if (relationshipShortcuts.ContainsKey(keyData))
+            {
+                string relationshipName = relationshipShortcuts[keyData];
+                deselectTool();
+                foreach (object item in toolStripButton_relationships.DropDown.Items)
+                {
+                    if (item is ToolStripMenuItem menuItem && menuItem.Tag.ToString() == relationshipName)
                     {
-                        selectedTool = toolName;
+                        ToolStripMenuItem_Click(menuItem, null);
                         break;
                     }
                 }
@@ -565,13 +566,45 @@ namespace YAUDE
         private void toolStripButton_split_Click(object sender, EventArgs e)
         {
             deselectTool();
-            selectedTool = ((ToolStripSplitButton)sender).Tag.ToString();
+            selectedTool = "addRelationship";
+            Dictionary<string, RelationshipType> pairs = new Dictionary<string, RelationshipType>()
+            {
+                { "addAssociation", RelationshipType.Association },
+                { "addInheritance", RelationshipType.Inheritance },
+                { "addRealization", RelationshipType.Realization },
+                { "addDependency", RelationshipType.Dependency },
+                { "addAggregation", RelationshipType.Aggregation },
+                { "addComposition", RelationshipType.Composition }
+
+            };
+            relationship = pairs[((ToolStripButton)sender).Tag.ToString()];
+            ((ToolStripButton)sender).Checked = true;
         }
 
         private void ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             deselectTool();
-            selectedTool = ((ToolStripMenuItem)sender).Tag.ToString();
+            selectedTool = "addRelationship";
+            Dictionary<string, RelationshipType> pairs = new Dictionary<string, RelationshipType>()
+            {
+                { "addAssociation", RelationshipType.Association },
+                { "addInheritance", RelationshipType.Inheritance },
+                { "addRealization", RelationshipType.Realization },
+                { "addDependency", RelationshipType.Dependency },
+                { "addAggregation", RelationshipType.Aggregation },
+                { "addComposition", RelationshipType.Composition }
+
+            };
+            relationship = pairs[((ToolStripMenuItem)sender).Tag.ToString()];
+            toolStripButton_addRelationship.Tag = ((ToolStripMenuItem)sender).Tag;
+            toolStripButton_addRelationship.Image = ((ToolStripMenuItem)sender).Image;
+            toolStripButton_addRelationship.Text = ((ToolStripMenuItem)sender).Text;
+            toolStripButton_addRelationship.Checked = true;
+        }
+
+        private void generateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CodeGenerator.GenerateSingleFile(elements, "testfile.cs", "testNamespace");
         }
     }
 }

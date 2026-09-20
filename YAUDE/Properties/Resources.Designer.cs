@@ -63,9 +63,29 @@ namespace YAUDE.Properties {
         /// <summary>
         ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap addAggregation {
+            get {
+                object obj = ResourceManager.GetObject("addAggregation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap addAssociation {
             get {
                 object obj = ResourceManager.GetObject("addAssociation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap addComposition {
+            get {
+                object obj = ResourceManager.GetObject("addComposition", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -86,6 +106,26 @@ namespace YAUDE.Properties {
         internal static System.Drawing.Bitmap addElement {
             get {
                 object obj = ResourceManager.GetObject("addElement", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap addInharitance {
+            get {
+                object obj = ResourceManager.GetObject("addInharitance", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap addRealization {
+            get {
+                object obj = ResourceManager.GetObject("addRealization", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
