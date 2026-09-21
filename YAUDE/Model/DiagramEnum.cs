@@ -11,14 +11,13 @@ namespace YAUDE.Model
         public DiagramEnum() : base()
         {
             Values = new List<string>();
+            Type = "Enum";
         }
 
         public override void Draw(Graphics g)
         {
             CalculateSize(g);
-            // Draw the class rectangle
-            g.FillRectangle(new SolidBrush(color), Position.X, Position.Y, Size.Width, Size.Height);
-            g.DrawRectangle(Pens.Black, Position.X, Position.Y, Size.Width, Size.Height);
+            base.Draw(g);
             // Draw the class name
             g.DrawString(Name, new Font("Arial Black", 10), Brushes.Black, Position.X + 5, Position.Y);
             g.DrawString("<< enum >>", new Font("Arial", 6), Brushes.Black, Position.X + 5, Position.Y + 15);

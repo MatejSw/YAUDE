@@ -17,6 +17,7 @@ namespace YAUDE
         private Point pan;
         private int zoomLevel = 100; // Default zoom level is 100%
         private bool mouseDown = false;
+        private bool justSaved = true;
         private DiagramElement selectedElement = null;
         private DiagramElement targetElement = null;
         private Dictionary<Visibility, string> visibilitySymbols = new Dictionary<Visibility, string>
@@ -109,6 +110,11 @@ namespace YAUDE
                 addEnum(location);
             }
 
+            else if (selectedTool == "addNote" && e.Button == MouseButtons.Left)
+            {
+                addNote(location);
+            }
+
             if (selectedTool == "deleteElement" && selectedElement != null && e.Button == MouseButtons.Left)
             {
                 DeleteSelectedElement();
@@ -135,6 +141,7 @@ namespace YAUDE
                     targetElement.Relationships.Add(new Relationship { Target = selectedElement, Type = relationship });
                     targetElement = null;
                     selectedElement = null;
+                    justSaved = false;
                 }
             }
 
@@ -148,6 +155,7 @@ namespace YAUDE
                 selectedElement.Relationships.Clear();
 
                 selectedElement = null;
+                justSaved = false;
             }
 
             if (e.Button == MouseButtons.Right)
@@ -176,6 +184,7 @@ namespace YAUDE
             {
                 selectedElement.Position = new Point((int)((e.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - mouseDownLocationFromElement.X), (int)((e.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - mouseDownLocationFromElement.Y));
                 pictureBox1.Invalidate(); // Refresh the PictureBox to show the moved class
+                justSaved = false;
             }
             if (mouseDown && (selectedTool == "pan" || e.Button == MouseButtons.Middle))
             {
@@ -202,16 +211,19 @@ namespace YAUDE
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
         {
+            int index = elements.IndexOf(selectedElement);
             if (selectedElement != null && selectedElement is DiagramClass selectedClass)
             {
                 EditClassForm editForm = new EditClassForm(selectedClass, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
                 if (editForm.ShowDialog() == DialogResult.OK)
                 {
-                    selectedElement = editForm.diagramClass;
+                    elements[index] = editForm.diagramClass;
+                    selectedElement = elements[index];
 
                     AutoAssignAssociations(selectedClass);
 
                     pictureBox1.Invalidate();
+                    justSaved = false;
                 }
             }
 
@@ -220,9 +232,24 @@ namespace YAUDE
                 EditEnumForm editForm = new EditEnumForm(selectedEnum, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
                 if (editForm.ShowDialog() == DialogResult.OK)
                 {
-                    selectedElement = editForm.diagramEnum;
+                    elements[index] = editForm.diagramEnum;
+                    selectedElement = elements[index];
 
                     pictureBox1.Invalidate();
+                    justSaved = false;
+                }
+            }
+
+            if (selectedElement != null && selectedElement is DiagramNote selectedNote)
+            {
+                EditNoteForm editForm = new EditNoteForm(selectedNote);
+                if (editForm.ShowDialog() == DialogResult.OK)
+                {
+                    elements[index] = editForm.diagramNote;
+                    selectedElement = elements[index];
+
+                    pictureBox1.Invalidate();
+                    justSaved = false;
                 }
             }
         }
@@ -241,6 +268,7 @@ namespace YAUDE
             selectedTool = "cursor";
             selectedElement = newClass;
             pictureBox1.Invalidate();
+            justSaved = false;
         }
 
         private void addEnum(Point location)
@@ -257,6 +285,25 @@ namespace YAUDE
             selectedTool = "cursor";
             selectedElement = newClass;
             pictureBox1.Invalidate();
+            justSaved = false;
+        }
+
+        private void addNote(Point location)
+        {
+            DiagramNote newClass = new DiagramNote()
+            {
+                Name = $"Note{(elements.Count == 0 ? "" : elements.Count + 1)}",
+                Position = location,
+                color = Color.LightGreen,
+                Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            };
+            elements.Add(newClass);
+            deselectTool();
+            toolStripButton_cursor.Checked = true;
+            selectedTool = "cursor";
+            selectedElement = newClass;
+            pictureBox1.Invalidate();
+            justSaved = false;
         }
 
         private void RightClick(Point location)
@@ -265,6 +312,7 @@ namespace YAUDE
 
             if (selectedElement != null)
             {
+                int index = elements.IndexOf(selectedElement);
                 if (selectedElement is DiagramClass selectedClass)
                 {
                     ToolStripMenuItem editItem = new ToolStripMenuItem("Edit Class");
@@ -275,11 +323,13 @@ namespace YAUDE
                         EditClassForm editForm = new EditClassForm(selectedClass, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
                         if (editForm.ShowDialog() == DialogResult.OK)
                         {
-                            selectedElement = editForm.diagramClass;
+                            elements[index] = editForm.diagramClass;
+                            selectedElement = elements[index];
 
                             AutoAssignAssociations(selectedClass);
 
                             pictureBox1.Invalidate();
+                            justSaved = false;
                         }
                     };
                 }
@@ -294,9 +344,30 @@ namespace YAUDE
                         EditEnumForm editForm = new EditEnumForm(selectedEnum, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
                         if (editForm.ShowDialog() == DialogResult.OK)
                         {
-                            selectedElement = editForm.diagramEnum;
+                            elements[index] = editForm.diagramEnum;
+                            selectedElement = elements[index];
 
                             pictureBox1.Invalidate();
+                            justSaved = false;
+                        }
+                    };
+                }
+
+                if (selectedElement is DiagramNote selectedNote)
+                {
+                    ToolStripMenuItem editItem = new ToolStripMenuItem("Edit Note");
+                    contextMenu.Items.Add(editItem);
+
+                    editItem.Click += (s, args) =>
+                    {
+                        EditNoteForm editForm = new EditNoteForm(selectedNote);
+                        if (editForm.ShowDialog() == DialogResult.OK)
+                        {
+                            elements[index] = editForm.diagramNote;
+                            selectedElement = elements[index];
+
+                            pictureBox1.Invalidate();
+                            justSaved = false;
                         }
                     };
                 }
@@ -311,6 +382,7 @@ namespace YAUDE
                     {
                         selectedElement.color = colorDialog.Color;
                         pictureBox1.Invalidate();
+                        justSaved = false;
                     }
                 };
 
@@ -336,6 +408,12 @@ namespace YAUDE
                 {
                     addEnum(new Point((int)((location.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)((location.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100))));
                 };
+                ToolStripMenuItem addNoteItem = new ToolStripMenuItem("Add new Note");
+                contextMenu.Items.Add(addNoteItem);
+                addNoteItem.Click += (s, args) =>
+                {
+                    addNote(new Point((int)((location.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)((location.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100))));
+                };
             }
 
             contextMenu.Show(pictureBox1, location);
@@ -353,6 +431,7 @@ namespace YAUDE
                 selectedElement = null;
 
                 pictureBox1.Invalidate();
+                justSaved = false;
             }
         }
 
@@ -409,7 +488,7 @@ namespace YAUDE
                 {
                     if (!autoAssign)
                     {
-                        if (MessageBox.Show("Class refrences an existing class. \n\n Would do like to auto-assing associations?", "Edit Class", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                        if (MessageBox.Show("Class refrences an existing element. \n\n Would do like to auto-assing associations?", "Edit Class", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                         {
                             autoAssign = true;
                         }
@@ -432,7 +511,7 @@ namespace YAUDE
                 {
                     if (!autoAssign)
                     {
-                        if (MessageBox.Show("Class refrences an existing class. \n\n Would do like to auto-assing associations?", "Edit Class", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                        if (MessageBox.Show("Class refrences an existing element. \n\n Would do like to auto-assing associations?", "Edit Class", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                         {
                             autoAssign = true;
                         }
@@ -455,6 +534,7 @@ namespace YAUDE
             {
                 toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(filePath)}";
                 this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
+                justSaved = true;
             }
         }
 
@@ -464,11 +544,26 @@ namespace YAUDE
             {
                 toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(filePath)}";
                 this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
+                justSaved = true;
             }
         }
 
         private void Open()
         {
+            if (!justSaved)
+            switch (MessageBox.Show("Would you like to save unsaved changes?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            {
+                case DialogResult.Yes:
+                    Save();
+                    break;
+
+                case DialogResult.No:
+                    break;
+
+                case DialogResult.Cancel:
+                    return;
+            }
+
             elements = FileSaver.Open(this);
             if (elements.Count != 0)
             {
@@ -495,11 +590,25 @@ namespace YAUDE
                 pictureBox1.Invalidate();
                 this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
                 pan = new Point(0, 0);
+                justSaved = true;
             }
         }
 
         private void New()
         {
+            if (!justSaved)
+            switch (MessageBox.Show("Would you like to save unsaved changes?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            {
+                case DialogResult.Yes:
+                    Save();
+                    break;
+
+                case DialogResult.No:
+                    break;
+
+                case DialogResult.Cancel:
+                    return;
+            }
             filePath = null;
             elements.Clear();
             deselectTool();
@@ -511,6 +620,7 @@ namespace YAUDE
             zoomLevel = 100;
             toolStripLabel_zoom.Text = $"{zoomLevel}%";
             this.Text = "YAUDE";
+            justSaved = true;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -634,6 +744,26 @@ namespace YAUDE
         private void generateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CodeGenerator.GenerateSingleFile(elements, "testfile.cs", "testNamespace");
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!justSaved)
+            {
+                switch (MessageBox.Show("Would you like to save unsaved changes?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+                {
+                    case DialogResult.Yes:
+                        Save();
+                        break;
+
+                    case DialogResult.No:
+                        break;
+
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                }
+            }
         }
     }
 }

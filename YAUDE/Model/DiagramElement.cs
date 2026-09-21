@@ -12,6 +12,7 @@ namespace YAUDE.Model
         public Size Size { get; set; }
         public Color color { get; set; }
         public List<Relationship> Relationships { get; set; }
+        public string Type { get; set; }
 
         public DiagramElement()
         {
@@ -22,7 +23,7 @@ namespace YAUDE.Model
         {
             int sizeX, sizeY;
 
-            zoom = zoom / 100;
+            zoom = Math.Min(zoom / 100, 1);
 
             CalculateSize(g);
 
@@ -133,7 +134,9 @@ namespace YAUDE.Model
         }
         public virtual void Draw(Graphics g)
         {
-
+            // Draw the class rectangle
+            g.FillRectangle(new SolidBrush(color), Position.X, Position.Y, Size.Width, Size.Height);
+            g.DrawRectangle(Pens.Black, Position.X, Position.Y, Size.Width, Size.Height);
         }
 
         protected virtual void CalculateSize(Graphics g)

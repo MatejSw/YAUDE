@@ -1,9 +1,5 @@
 [
   {
-    "Name": "Person",
-    "Position": "84, 135",
-    "Size": "100, 100",
-    "color": "LightBlue",
     "Attributes": [
       {
         "Name": "Name",
@@ -14,16 +10,39 @@
         "Name": "Age",
         "Type": "int",
         "Visibility": 1
+      },
+      {
+        "Name": "Status",
+        "Type": "JobStatus",
+        "Visibility": 1
       }
     ],
     "Methods": [],
-    "Relationships": []
+    "Name": "Person",
+    "Position": "84, 125",
+    "Size": "130, 120",
+    "color": "LightBlue",
+    "Relationships": [
+      {
+        "Target": {
+          "Values": [
+            "Unemployed",
+            "Employed",
+            "Retired"
+          ],
+          "Name": "JobStatus",
+          "Position": "102, -113",
+          "Size": "95, 120",
+          "color": "LightCoral",
+          "Relationships": [],
+          "Type": "Enum"
+        },
+        "Type": 0
+      }
+    ],
+    "Type": "Class"
   },
   {
-    "Name": "Company",
-    "Position": "361, 95",
-    "Size": "162, 180",
-    "color": "128, 128, 192",
     "Attributes": [
       {
         "Name": "Workers",
@@ -60,13 +79,13 @@
         "Visibility": 1
       }
     ],
+    "Name": "Company",
+    "Position": "361, 95",
+    "Size": "162, 180",
+    "color": "128, 128, 192",
     "Relationships": [
       {
         "Target": {
-          "Name": "Person",
-          "Position": "84, 135",
-          "Size": "100, 100",
-          "color": "LightBlue",
           "Attributes": [
             {
               "Name": "Name",
@@ -77,19 +96,42 @@
               "Name": "Age",
               "Type": "int",
               "Visibility": 1
+            },
+            {
+              "Name": "Status",
+              "Type": "JobStatus",
+              "Visibility": 1
             }
           ],
           "Methods": [],
-          "Relationships": []
+          "Name": "Person",
+          "Position": "84, 125",
+          "Size": "130, 120",
+          "color": "LightBlue",
+          "Relationships": [
+            {
+              "Target": {
+                "Values": [
+                  "Unemployed",
+                  "Employed",
+                  "Retired"
+                ],
+                "Name": "JobStatus",
+                "Position": "102, -113",
+                "Size": "95, 120",
+                "color": "LightCoral",
+                "Relationships": [],
+                "Type": "Enum"
+              },
+              "Type": 0
+            }
+          ],
+          "Type": "Class"
         },
         "Type": 0
       },
       {
         "Target": {
-          "Name": "Job",
-          "Position": "385, -116",
-          "Size": "115, 100",
-          "color": "255, 128, 64",
           "Attributes": [
             {
               "Name": "Payment",
@@ -102,18 +144,27 @@
               "Visibility": 1
             }
           ],
-          "Methods": [],
-          "Relationships": []
+          "Methods": [
+            {
+              "Name": "ApplyForJob",
+              "ReturnType": "void",
+              "Parameters": "Person",
+              "Visibility": 1
+            }
+          ],
+          "Name": "Job",
+          "Position": "366, -127",
+          "Size": "152, 120",
+          "color": "255, 128, 64",
+          "Relationships": [],
+          "Type": "Class"
         },
         "Type": 0
       }
-    ]
+    ],
+    "Type": "Class"
   },
   {
-    "Name": "Job",
-    "Position": "385, -116",
-    "Size": "115, 100",
-    "color": "255, 128, 64",
     "Attributes": [
       {
         "Name": "Payment",
@@ -126,23 +177,31 @@
         "Visibility": 1
       }
     ],
-    "Methods": [],
-    "Relationships": []
+    "Methods": [
+      {
+        "Name": "ApplyForJob",
+        "ReturnType": "void",
+        "Parameters": "Person",
+        "Visibility": 1
+      }
+    ],
+    "Name": "Job",
+    "Position": "366, -127",
+    "Size": "152, 120",
+    "color": "255, 128, 64",
+    "Relationships": [],
+    "Type": "Class"
   },
   {
+    "Attributes": [],
+    "Methods": [],
     "Name": "ItSpecialist",
     "Position": "669, -13",
     "Size": "100, 60",
     "color": "Yellow",
-    "Attributes": [],
-    "Methods": [],
     "Relationships": [
       {
         "Target": {
-          "Name": "Job",
-          "Position": "385, -116",
-          "Size": "115, 100",
-          "color": "255, 128, 64",
           "Attributes": [
             {
               "Name": "Payment",
@@ -155,11 +214,92 @@
               "Visibility": 1
             }
           ],
-          "Methods": [],
-          "Relationships": []
+          "Methods": [
+            {
+              "Name": "ApplyForJob",
+              "ReturnType": "void",
+              "Parameters": "Person",
+              "Visibility": 1
+            }
+          ],
+          "Name": "Job",
+          "Position": "366, -127",
+          "Size": "152, 120",
+          "color": "255, 128, 64",
+          "Relationships": [],
+          "Type": "Class"
         },
         "Type": 1
       }
-    ]
+    ],
+    "Type": "Class"
+  },
+  {
+    "Values": [
+      "Unemployed",
+      "Employed",
+      "Retired"
+    ],
+    "Name": "JobStatus",
+    "Position": "102, -113",
+    "Size": "95, 120",
+    "color": "LightCoral",
+    "Relationships": [],
+    "Type": "Enum"
+  },
+  {
+    "Text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nLoad and save works even with different elements! Yippee!!",
+    "Name": "Note5",
+    "Position": "618, 200",
+    "Size": "203, 75",
+    "color": "LightGreen",
+    "Relationships": [
+      {
+        "Target": {
+          "Attributes": [],
+          "Methods": [],
+          "Name": "ItSpecialist",
+          "Position": "669, -13",
+          "Size": "100, 60",
+          "color": "Yellow",
+          "Relationships": [
+            {
+              "Target": {
+                "Attributes": [
+                  {
+                    "Name": "Payment",
+                    "Type": "int",
+                    "Visibility": 1
+                  },
+                  {
+                    "Name": "Difficulty",
+                    "Type": "string",
+                    "Visibility": 1
+                  }
+                ],
+                "Methods": [
+                  {
+                    "Name": "ApplyForJob",
+                    "ReturnType": "void",
+                    "Parameters": "Person",
+                    "Visibility": 1
+                  }
+                ],
+                "Name": "Job",
+                "Position": "366, -127",
+                "Size": "152, 120",
+                "color": "255, 128, 64",
+                "Relationships": [],
+                "Type": "Class"
+              },
+              "Type": 1
+            }
+          ],
+          "Type": "Class"
+        },
+        "Type": 0
+      }
+    ],
+    "Type": "Note"
   }
 ]

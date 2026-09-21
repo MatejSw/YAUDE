@@ -15,6 +15,7 @@ namespace YAUDE.Model
         {
             Attributes = new List<Attribute>();
             Methods = new List<Method>();
+            Type = "Class";
         }
 
         public override void Draw(Graphics g)
@@ -28,9 +29,7 @@ namespace YAUDE.Model
             };
 
             CalculateSize(g);
-            // Draw the class rectangle
-            g.FillRectangle(new SolidBrush(color), Position.X, Position.Y, Size.Width, Size.Height);
-            g.DrawRectangle(Pens.Black, Position.X, Position.Y, Size.Width, Size.Height);
+            base.Draw(g);
             // Draw the class name
             g.DrawString(Name, new Font("Arial Black", 10), Brushes.Black, Position.X + 5, Position.Y);
             // Draw the attributes

@@ -113,9 +113,29 @@ namespace YAUDE.Properties {
         /// <summary>
         ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap addEnum {
+            get {
+                object obj = ResourceManager.GetObject("addEnum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap addInharitance {
             get {
                 object obj = ResourceManager.GetObject("addInharitance", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap addNote {
+            get {
+                object obj = ResourceManager.GetObject("addNote", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -12,7 +12,6 @@ namespace YAUDE.Forms
 {
     public partial class EditEnumForm : Form
     {
-        private BindingList<string> values;
         public DiagramEnum diagramEnum;
         private List<string> enumNames;
 
@@ -20,33 +19,24 @@ namespace YAUDE.Forms
         {
             InitializeComponent();
 
-            values = new BindingList<string>(diagram.Values);
             textBox_name.Text = diagram.Name;
             enumNames = names;
+            diagramEnum = diagram;
 
-            dataGridView1.DataSource = values;
-        }
-
-        private void button_addAttribute_Click(object sender, EventArgs e)
-        {
-            values.Add($"Value{values.Count + 1}");
-            button_deleteAttribute.Enabled = true;
-        }
-
-        private void button_deleteAttribute_Click(object sender, EventArgs e)
-        {
-            if (dataGridView1.CurrentRow != null)
-                values.RemoveAt(dataGridView1.CurrentRow.Index);
-            button_deleteAttribute.Enabled = values.Count > 0;
+            foreach (string item in diagram.Values)
+            {
+                richTextBox_values.Text += item;
+                richTextBox_values.Text += "\n";
+            }
+            richTextBox_values.Text.Trim('\n');
         }
 
         private void button_ok_Click(object sender, EventArgs e)
         {
             if (this.ValidateChildren())
             {
-                diagramEnum = new();
                 diagramEnum.Name = textBox_name.Text;
-                diagramEnum.Values = values.ToList();
+                diagramEnum.Values = richTextBox_values.Text.Split('\n').ToList();
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }

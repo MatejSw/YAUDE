@@ -32,13 +32,10 @@
             label1 = new Label();
             textBox_name = new TextBox();
             label2 = new Label();
-            dataGridView1 = new DataGridView();
-            button_deleteAttribute = new Button();
-            button_addAttribute = new Button();
             button_ok = new Button();
             button_cancel = new Button();
             errorProvider1 = new ErrorProvider(components);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            richTextBox_values = new RichTextBox();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
@@ -68,36 +65,6 @@
             label2.TabIndex = 2;
             label2.Text = "Values";
             // 
-            // dataGridView1
-            // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(12, 143);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(360, 166);
-            dataGridView1.TabIndex = 3;
-            // 
-            // button_deleteAttribute
-            // 
-            button_deleteAttribute.Location = new Point(318, 113);
-            button_deleteAttribute.Name = "button_deleteAttribute";
-            button_deleteAttribute.Size = new Size(24, 24);
-            button_deleteAttribute.TabIndex = 13;
-            button_deleteAttribute.Text = "-";
-            button_deleteAttribute.UseVisualStyleBackColor = true;
-            button_deleteAttribute.Click += button_deleteAttribute_Click;
-            // 
-            // button_addAttribute
-            // 
-            button_addAttribute.Location = new Point(348, 113);
-            button_addAttribute.Name = "button_addAttribute";
-            button_addAttribute.Size = new Size(24, 24);
-            button_addAttribute.TabIndex = 12;
-            button_addAttribute.Text = "+";
-            button_addAttribute.UseVisualStyleBackColor = true;
-            button_addAttribute.Click += button_addAttribute_Click;
-            // 
             // button_ok
             // 
             button_ok.Location = new Point(216, 341);
@@ -122,22 +89,28 @@
             // 
             errorProvider1.ContainerControl = this;
             // 
+            // richTextBox_values
+            // 
+            richTextBox_values.Location = new Point(12, 143);
+            richTextBox_values.Name = "richTextBox_values";
+            richTextBox_values.Size = new Size(360, 192);
+            richTextBox_values.TabIndex = 16;
+            richTextBox_values.Text = "";
+            // 
             // EditEnumForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(384, 376);
+            Controls.Add(richTextBox_values);
             Controls.Add(button_ok);
             Controls.Add(button_cancel);
-            Controls.Add(button_deleteAttribute);
-            Controls.Add(button_addAttribute);
-            Controls.Add(dataGridView1);
             Controls.Add(label2);
             Controls.Add(textBox_name);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "EditEnumForm";
             Text = "EditEnumForm";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -148,11 +121,9 @@
         private Label label1;
         private TextBox textBox_name;
         private Label label2;
-        private DataGridView dataGridView1;
-        private Button button_deleteAttribute;
-        private Button button_addAttribute;
         private Button button_ok;
         private Button button_cancel;
         private ErrorProvider errorProvider1;
+        private RichTextBox richTextBox_values;
     }
 }

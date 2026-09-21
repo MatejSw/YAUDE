@@ -1,0 +1,22 @@
+[
+  {
+    "Attributes": [],
+    "Methods": [],
+    "Name": "NewClass",
+    "Position": "-268, -96",
+    "Size": "89, 60",
+    "color": "LightBlue",
+    "Relationships": [],
+    "Type": "Class"
+  },
+  {
+    "Attributes": [],
+    "Methods": [],
+    "Name": "NewClass2",
+    "Position": "34, -5",
+    "Size": "98, 60",
+    "color": "LightBlue",
+    "Relationships": [],
+    "Type": "Class"
+  }
+]

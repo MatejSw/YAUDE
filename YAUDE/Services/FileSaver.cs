@@ -69,7 +69,18 @@ namespace YAUDE.Services
                 using (StreamReader reader = new StreamReader(openFileDialog.FileName))
                 {
                     string json = reader.ReadToEnd();
-                    list = JsonConvert.DeserializeObject<List<DiagramElement>>(json);
+                    List<DiagramElement> temp = new();
+
+                    temp.AddRange(JsonConvert.DeserializeObject<List<DiagramClass>>(json));
+                    list.AddRange(temp.Where(x => x.Type == "Class"));
+
+                    temp.Clear();
+                    temp.AddRange(JsonConvert.DeserializeObject<List<DiagramEnum>>(json));
+                    list.AddRange(temp.Where(x => x.Type == "Enum"));
+
+                    temp.Clear();
+                    temp.AddRange(JsonConvert.DeserializeObject<List<DiagramNote>>(json));
+                    list.AddRange(temp.Where(x => x.Type == "Note"));
                 }
                 form.filePath = openFileDialog.FileName;
                 return list;
