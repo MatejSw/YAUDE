@@ -1,0 +1,33 @@
+[
+  {
+    "Attributes": [],
+    "Methods": [],
+    "Name": "NewClass",
+    "Position": "-184, 8",
+    "Size": "89, 60",
+    "color": "LightBlue",
+    "Relationships": [
+      {
+        "Target": {
+          "Attributes": [],
+          "Methods": [],
+          "Name": "NewClass2",
+          "Position": "43, -35",
+          "Size": "98, 60",
+          "color": "LightBlue",
+          "Relationships": []
+        },
+        "Type": 1
+      }
+    ]
+  },
+  {
+    "Attributes": [],
+    "Methods": [],
+    "Name": "NewClass2",
+    "Position": "43, -35",
+    "Size": "98, 60",
+    "color": "LightBlue",
+    "Relationships": []
+  }
+]

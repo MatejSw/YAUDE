@@ -36,6 +36,7 @@
             toolStripButton2 = new ToolStripButton();
             toolStripSeparator2 = new ToolStripSeparator();
             toolStripButton_addElement = new ToolStripButton();
+            toolStripButton3 = new ToolStripButton();
             toolStripButton1 = new ToolStripButton();
             toolStripSeparator3 = new ToolStripSeparator();
             toolStripLabel_status = new ToolStripLabel();
@@ -87,7 +88,7 @@
             // toolStrip_bottom
             // 
             toolStrip_bottom.Dock = DockStyle.Bottom;
-            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton1, toolStripSeparator3, toolStripLabel_status, toolStripButton_addRelationship, toolStripButton_relationships, toolStripButton5, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
+            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton3, toolStripButton1, toolStripSeparator3, toolStripLabel_status, toolStripButton_addRelationship, toolStripButton_relationships, toolStripButton5, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
             toolStrip_bottom.Location = new Point(0, 425);
             toolStrip_bottom.Name = "toolStrip_bottom";
             toolStrip_bottom.Size = new Size(800, 25);
@@ -135,9 +136,20 @@
             toolStripButton_addElement.ImageTransparentColor = Color.Magenta;
             toolStripButton_addElement.Name = "toolStripButton_addElement";
             toolStripButton_addElement.Size = new Size(23, 22);
-            toolStripButton_addElement.Tag = "addElement";
+            toolStripButton_addElement.Tag = "addClass";
             toolStripButton_addElement.Text = "Add element (A)";
             toolStripButton_addElement.Click += toolStripButton_Click;
+            // 
+            // toolStripButton3
+            // 
+            toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton3.Image = Properties.Resources.addElement;
+            toolStripButton3.ImageTransparentColor = Color.Magenta;
+            toolStripButton3.Name = "toolStripButton3";
+            toolStripButton3.Size = new Size(23, 22);
+            toolStripButton3.Tag = "addEnum";
+            toolStripButton3.Text = "Add Enum (E)";
+            toolStripButton3.Click += toolStripButton_Click;
             // 
             // toolStripButton1
             // 
@@ -190,7 +202,7 @@
             associationToolStripMenuItem.Image = Properties.Resources.addAssociation;
             associationToolStripMenuItem.Name = "associationToolStripMenuItem";
             associationToolStripMenuItem.ShortcutKeyDisplayString = "S";
-            associationToolStripMenuItem.Size = new Size(156, 22);
+            associationToolStripMenuItem.Size = new Size(180, 22);
             associationToolStripMenuItem.Tag = "addAssociation";
             associationToolStripMenuItem.Text = "Association";
             associationToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -200,7 +212,7 @@
             inheritanceToolStripMenuItem.Image = Properties.Resources.addInharitance;
             inheritanceToolStripMenuItem.Name = "inheritanceToolStripMenuItem";
             inheritanceToolStripMenuItem.ShortcutKeyDisplayString = "I";
-            inheritanceToolStripMenuItem.Size = new Size(156, 22);
+            inheritanceToolStripMenuItem.Size = new Size(180, 22);
             inheritanceToolStripMenuItem.Tag = "addInheritance";
             inheritanceToolStripMenuItem.Text = "Inheritance";
             inheritanceToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -210,7 +222,7 @@
             realizationToolStripMenuItem.Image = Properties.Resources.addRealization;
             realizationToolStripMenuItem.Name = "realizationToolStripMenuItem";
             realizationToolStripMenuItem.ShortcutKeyDisplayString = "T";
-            realizationToolStripMenuItem.Size = new Size(156, 22);
+            realizationToolStripMenuItem.Size = new Size(180, 22);
             realizationToolStripMenuItem.Tag = "addRealization";
             realizationToolStripMenuItem.Text = "Realization";
             realizationToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -219,8 +231,8 @@
             // 
             aaaToolStripMenuItem.Image = Properties.Resources.addDependency;
             aaaToolStripMenuItem.Name = "aaaToolStripMenuItem";
-            aaaToolStripMenuItem.ShortcutKeyDisplayString = "E";
-            aaaToolStripMenuItem.Size = new Size(156, 22);
+            aaaToolStripMenuItem.ShortcutKeyDisplayString = "V";
+            aaaToolStripMenuItem.Size = new Size(180, 22);
             aaaToolStripMenuItem.Tag = "addDependency";
             aaaToolStripMenuItem.Text = "Dependency";
             aaaToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -230,7 +242,7 @@
             aggregationToolStripMenuItem.Image = Properties.Resources.addAggregation;
             aggregationToolStripMenuItem.Name = "aggregationToolStripMenuItem";
             aggregationToolStripMenuItem.ShortcutKeyDisplayString = "Q";
-            aggregationToolStripMenuItem.Size = new Size(156, 22);
+            aggregationToolStripMenuItem.Size = new Size(180, 22);
             aggregationToolStripMenuItem.Tag = "addAggregation";
             aggregationToolStripMenuItem.Text = "Aggregation";
             aggregationToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -240,7 +252,7 @@
             compositionToolStripMenuItem.Image = Properties.Resources.addComposition;
             compositionToolStripMenuItem.Name = "compositionToolStripMenuItem";
             compositionToolStripMenuItem.ShortcutKeyDisplayString = "F";
-            compositionToolStripMenuItem.Size = new Size(156, 22);
+            compositionToolStripMenuItem.Size = new Size(180, 22);
             compositionToolStripMenuItem.Tag = "addComposition";
             compositionToolStripMenuItem.Text = "Composition";
             compositionToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -356,7 +368,7 @@
             // generateToolStripMenuItem
             // 
             generateToolStripMenuItem.Name = "generateToolStripMenuItem";
-            generateToolStripMenuItem.Size = new Size(180, 22);
+            generateToolStripMenuItem.Size = new Size(121, 22);
             generateToolStripMenuItem.Text = "Generate";
             generateToolStripMenuItem.Click += generateToolStripMenuItem_Click;
             // 
@@ -440,5 +452,6 @@
         private ToolStripMenuItem aggregationToolStripMenuItem;
         private ToolStripMenuItem compositionToolStripMenuItem;
         private ToolStripButton toolStripButton_addRelationship;
+        private ToolStripButton toolStripButton3;
     }
 }

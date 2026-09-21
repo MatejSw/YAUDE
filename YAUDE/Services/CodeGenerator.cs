@@ -7,7 +7,7 @@ namespace YAUDE.Services
 {
     public static class CodeGenerator
     {
-        public static void GenerateSingleFile(List<DiagramClass> elements, string filepath, string projectName)
+        public static void GenerateSingleFile(List<DiagramElement> elements, string filepath, string projectName)
         {
             using (StreamWriter sw = new(filepath))
             {

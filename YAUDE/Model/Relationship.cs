@@ -6,7 +6,7 @@ namespace YAUDE.Model
 {
     public class Relationship
     {
-        public DiagramClass Target { get; set; }
+        public DiagramElement Target { get; set; }
         public RelationshipType Type { get; set; }
     }
 }

@@ -112,7 +112,7 @@ namespace YAUDE
             else if (classNames.Contains(textBox_className.Text))
             {
                 e.Cancel = true;
-                errorProvider1.SetError(textBox_className, "An existing class already has this name.");
+                errorProvider1.SetError(textBox_className, "An existing element already has this name.");
             }
             else
             {
@@ -169,6 +169,11 @@ namespace YAUDE
 
             e.Cancel = false;
             errorProvider1.SetError(dataGridView_methods, string.Empty);
+        }
+
+        private void textBox_name_Validating(object sender, CancelEventArgs e)
+        {
+
         }
     }
 }

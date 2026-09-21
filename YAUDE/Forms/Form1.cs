@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System.Drawing.Drawing2D;
+using YAUDE.Forms;
 using YAUDE.Model;
 using YAUDE.Services;
 
@@ -7,17 +8,17 @@ namespace YAUDE
 {
     public partial class Form1 : Form
     {
-        private List<DiagramClass> elements = new List<DiagramClass>();
+        public List<DiagramElement> elements = new List<DiagramElement>();
         private string selectedTool = "cursor"; // Default tool is cursor
-        private string filePath = null;
+        public string filePath = null;
         private Point mouseDownLocationFromElement;
         private Point mouseStartPos;
         private Point panStart;
         private Point pan;
         private int zoomLevel = 100; // Default zoom level is 100%
         private bool mouseDown = false;
-        private DiagramClass selectedElement = null;
-        private DiagramClass targetElement = null;
+        private DiagramElement selectedElement = null;
+        private DiagramElement targetElement = null;
         private Dictionary<Visibility, string> visibilitySymbols = new Dictionary<Visibility, string>
         {
             { Visibility.Public, "+" },
@@ -38,12 +39,12 @@ namespace YAUDE
             e.Graphics.ScaleTransform(zoomLevel / 100f, zoomLevel / 100f);
 
 
-            foreach (DiagramClass element in elements)
+            foreach (DiagramElement element in elements)
             {
                 element.DrawRelationships(e.Graphics, zoomLevel);
             }
 
-            foreach (DiagramClass element in elements)
+            foreach (DiagramElement element in elements)
             {
                 element.Draw(e.Graphics);
 
@@ -98,9 +99,14 @@ namespace YAUDE
                 mouseDownLocationFromElement = new Point((int)((e.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - selectedElement.Position.X), (int)((e.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - selectedElement.Position.Y));
             }
 
-            else if (selectedTool == "addElement" && e.Button == MouseButtons.Left)
+            else if (selectedTool == "addClass" && e.Button == MouseButtons.Left)
             {
-                addElement(location);
+                addClass(location);
+            }
+
+            else if (selectedTool == "addEnum" && e.Button == MouseButtons.Left)
+            {
+                addEnum(location);
             }
 
             if (selectedTool == "deleteElement" && selectedElement != null && e.Button == MouseButtons.Left)
@@ -196,27 +202,54 @@ namespace YAUDE
 
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
         {
-            if (selectedElement != null)
+            if (selectedElement != null && selectedElement is DiagramClass selectedClass)
             {
-                EditClassForm editForm = new EditClassForm(selectedElement, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
+                EditClassForm editForm = new EditClassForm(selectedClass, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
                 if (editForm.ShowDialog() == DialogResult.OK)
                 {
                     selectedElement = editForm.diagramClass;
 
-                    AutoAssignAssociations(selectedElement);
+                    AutoAssignAssociations(selectedClass);
+
+                    pictureBox1.Invalidate();
+                }
+            }
+
+            if (selectedElement != null && selectedElement is DiagramEnum selectedEnum)
+            {
+                EditEnumForm editForm = new EditEnumForm(selectedEnum, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
+                if (editForm.ShowDialog() == DialogResult.OK)
+                {
+                    selectedElement = editForm.diagramEnum;
 
                     pictureBox1.Invalidate();
                 }
             }
         }
 
-        private void addElement(Point location)
+        private void addClass(Point location)
         {
-            DiagramClass newClass = new DiagramClass
+            DiagramClass newClass = new DiagramClass()
             {
                 Name = $"NewClass{(elements.Count == 0 ? "" : elements.Count + 1)}",
                 Position = location,
                 color = Color.LightBlue,
+            };
+            elements.Add(newClass);
+            deselectTool();
+            toolStripButton_cursor.Checked = true;
+            selectedTool = "cursor";
+            selectedElement = newClass;
+            pictureBox1.Invalidate();
+        }
+
+        private void addEnum(Point location)
+        {
+            DiagramEnum newClass = new DiagramEnum()
+            {
+                Name = $"NewEnum{(elements.Count == 0 ? "" : elements.Count + 1)}",
+                Position = location,
+                color = Color.LightCoral,
             };
             elements.Add(newClass);
             deselectTool();
@@ -232,21 +265,41 @@ namespace YAUDE
 
             if (selectedElement != null)
             {
-                ToolStripMenuItem editItem = new ToolStripMenuItem("Edit Class");
-                contextMenu.Items.Add(editItem);
-
-                editItem.Click += (s, args) =>
+                if (selectedElement is DiagramClass selectedClass)
                 {
-                    EditClassForm editForm = new EditClassForm(selectedElement, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
-                    if (editForm.ShowDialog() == DialogResult.OK)
+                    ToolStripMenuItem editItem = new ToolStripMenuItem("Edit Class");
+                    contextMenu.Items.Add(editItem);
+
+                    editItem.Click += (s, args) =>
                     {
-                        selectedElement = editForm.diagramClass;
+                        EditClassForm editForm = new EditClassForm(selectedClass, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
+                        if (editForm.ShowDialog() == DialogResult.OK)
+                        {
+                            selectedElement = editForm.diagramClass;
 
-                        AutoAssignAssociations(selectedElement);
+                            AutoAssignAssociations(selectedClass);
 
-                        pictureBox1.Invalidate();
-                    }
-                };
+                            pictureBox1.Invalidate();
+                        }
+                    };
+                }
+
+                if (selectedElement is DiagramEnum selectedEnum)
+                {
+                    ToolStripMenuItem editItem = new ToolStripMenuItem("Edit Enum");
+                    contextMenu.Items.Add(editItem);
+
+                    editItem.Click += (s, args) =>
+                    {
+                        EditEnumForm editForm = new EditEnumForm(selectedEnum, elements.Where(x => x != selectedElement).Select(x => x.Name).ToList());
+                        if (editForm.ShowDialog() == DialogResult.OK)
+                        {
+                            selectedElement = editForm.diagramEnum;
+
+                            pictureBox1.Invalidate();
+                        }
+                    };
+                }
 
                 ToolStripMenuItem editColor = new ToolStripMenuItem("Edit Color");
                 contextMenu.Items.Add(editColor);
@@ -271,11 +324,17 @@ namespace YAUDE
             }
             else
             {
-                ToolStripMenuItem addItem = new ToolStripMenuItem("Add new Class");
-                contextMenu.Items.Add(addItem);
-                addItem.Click += (s, args) =>
+                ToolStripMenuItem addClassItem = new ToolStripMenuItem("Add new Class");
+                contextMenu.Items.Add(addClassItem);
+                addClassItem.Click += (s, args) =>
                 {
-                    addElement(new Point((int)((location.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)((location.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100))));
+                    addClass(new Point((int)((location.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)((location.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100))));
+                };
+                ToolStripMenuItem addEnumItem = new ToolStripMenuItem("Add new Enum");
+                contextMenu.Items.Add(addEnumItem);
+                addEnumItem.Click += (s, args) =>
+                {
+                    addEnum(new Point((int)((location.X - pictureBox1.Width / 2) / ((double)zoomLevel / 100) - pan.X / ((double)zoomLevel / 100)), (int)((location.Y - pictureBox1.Height / 2) / ((double)zoomLevel / 100) - pan.Y / ((double)zoomLevel / 100))));
                 };
             }
 
@@ -392,59 +451,28 @@ namespace YAUDE
 
         private void Save()
         {
-            if (filePath == null)
+            if (FileSaver.Save(this))
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    filePath = saveFileDialog.FileName;
-                }
-                else
-                {
-                    return; // User cancelled the save operation
-                }
+                toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(filePath)}";
+                this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
             }
-            using (StreamWriter writer = new StreamWriter(filePath))
-            {
-                string json = JsonConvert.SerializeObject(elements, Formatting.Indented);
-                writer.Write(json);
-            }
-            toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(filePath)}";
-            this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
         }
 
         private void SaveAs()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (FileSaver.SaveAs(this))
             {
-                using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
-                {
-                    string json = JsonConvert.SerializeObject(elements, Formatting.Indented);
-                    writer.Write(json);
-                }
-                toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(saveFileDialog.FileName)}";
-                filePath = saveFileDialog.FileName;
+                toolStripLabel_status.Text = $"Diagram saved as: {Path.GetFileName(filePath)}";
                 this.Text = $"YAUDE - {Path.GetFileName(filePath)}";
             }
         }
 
         private void Open()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            elements = FileSaver.Open(this);
+            if (elements.Count != 0)
             {
-                using (StreamReader reader = new StreamReader(openFileDialog.FileName))
-                {
-                    string json = reader.ReadToEnd();
-                    elements = JsonConvert.DeserializeObject<List<DiagramClass>>(json);
-                }
-                toolStripLabel_status.Text = $"Loaded diagram: {openFileDialog.SafeFileName}";
-                filePath = openFileDialog.FileName;
+                toolStripLabel_status.Text = $"Loaded diagram: {Path.GetFileName(filePath)}";
                 deselectTool();
                 toolStripButton_cursor.Checked = true;
                 selectedTool = "cursor";
@@ -456,7 +484,7 @@ namespace YAUDE
                     elements[i].Relationships = new List<Relationship>();
                     for (int j = 0; j < temp.Count; j++)
                     {
-                        DiagramClass targetElement = elements.FirstOrDefault(x => x.Name == temp[j].Target.Name);
+                        DiagramElement targetElement = elements.FirstOrDefault(x => x.Name == temp[j].Target.Name);
                         if (targetElement != null)
                         {
                             elements[i].Relationships.Add(new Relationship { Target = targetElement, Type = temp[j].Type });
@@ -490,7 +518,8 @@ namespace YAUDE
             Dictionary<string, Keys> toolShortcuts = new Dictionary<string, Keys>
             {
                 { "cursor", Keys.C },
-                { "addElement", Keys.A },
+                { "addClass", Keys.A },
+                { "addEnum", Keys.E },
                 { "deleteElement", Keys.D },
                 { "pan", Keys.P },
                 { "removeRelationships", Keys.R }
@@ -501,7 +530,7 @@ namespace YAUDE
                 { Keys.S, "addAssociation" },
                 { Keys.I, "addInheritance" },
                 { Keys.T, "addRealization" },
-                { Keys.E, "addDependency" },
+                { Keys.V, "addDependency" },
                 { Keys.Q, "addAggregation" },
                 { Keys.F, "addComposition" }
             };
