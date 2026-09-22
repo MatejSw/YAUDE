@@ -42,6 +42,10 @@
             errorProvider1 = new ErrorProvider(components);
             button_deleteAttribute = new Button();
             button_deleteMethod = new Button();
+            label4 = new Label();
+            comboBox1 = new ComboBox();
+            comboBox2 = new ComboBox();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView_attributes).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView_methods).BeginInit();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
@@ -67,7 +71,7 @@
             // 
             // button_addAttribute
             // 
-            button_addAttribute.Location = new Point(449, 88);
+            button_addAttribute.Location = new Point(449, 129);
             button_addAttribute.Name = "button_addAttribute";
             button_addAttribute.Size = new Size(24, 24);
             button_addAttribute.TabIndex = 3;
@@ -80,7 +84,7 @@
             dataGridView_attributes.AllowUserToAddRows = false;
             dataGridView_attributes.AllowUserToDeleteRows = false;
             dataGridView_attributes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView_attributes.Location = new Point(17, 118);
+            dataGridView_attributes.Location = new Point(17, 159);
             dataGridView_attributes.Name = "dataGridView_attributes";
             dataGridView_attributes.Size = new Size(456, 109);
             dataGridView_attributes.TabIndex = 4;
@@ -89,7 +93,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(17, 93);
+            label2.Location = new Point(17, 134);
             label2.Name = "label2";
             label2.Size = new Size(59, 15);
             label2.TabIndex = 5;
@@ -98,7 +102,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(17, 246);
+            label3.Location = new Point(17, 287);
             label3.Name = "label3";
             label3.Size = new Size(54, 15);
             label3.TabIndex = 8;
@@ -109,7 +113,7 @@
             dataGridView_methods.AllowUserToAddRows = false;
             dataGridView_methods.AllowUserToDeleteRows = false;
             dataGridView_methods.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView_methods.Location = new Point(17, 271);
+            dataGridView_methods.Location = new Point(17, 312);
             dataGridView_methods.Name = "dataGridView_methods";
             dataGridView_methods.Size = new Size(456, 109);
             dataGridView_methods.TabIndex = 7;
@@ -117,7 +121,7 @@
             // 
             // button_addMethod
             // 
-            button_addMethod.Location = new Point(449, 241);
+            button_addMethod.Location = new Point(449, 282);
             button_addMethod.Name = "button_addMethod";
             button_addMethod.Size = new Size(24, 24);
             button_addMethod.TabIndex = 6;
@@ -127,7 +131,7 @@
             // 
             // button_cancel
             // 
-            button_cancel.Location = new Point(398, 415);
+            button_cancel.Location = new Point(398, 456);
             button_cancel.Name = "button_cancel";
             button_cancel.Size = new Size(75, 23);
             button_cancel.TabIndex = 9;
@@ -137,7 +141,7 @@
             // 
             // button_ok
             // 
-            button_ok.Location = new Point(317, 415);
+            button_ok.Location = new Point(317, 456);
             button_ok.Name = "button_ok";
             button_ok.Size = new Size(75, 23);
             button_ok.TabIndex = 10;
@@ -151,7 +155,7 @@
             // 
             // button_deleteAttribute
             // 
-            button_deleteAttribute.Location = new Point(419, 88);
+            button_deleteAttribute.Location = new Point(419, 129);
             button_deleteAttribute.Name = "button_deleteAttribute";
             button_deleteAttribute.Size = new Size(24, 24);
             button_deleteAttribute.TabIndex = 11;
@@ -161,13 +165,49 @@
             // 
             // button_deleteMethod
             // 
-            button_deleteMethod.Location = new Point(419, 241);
+            button_deleteMethod.Location = new Point(419, 282);
             button_deleteMethod.Name = "button_deleteMethod";
             button_deleteMethod.Size = new Size(24, 24);
             button_deleteMethod.TabIndex = 12;
             button_deleteMethod.Text = "-";
             button_deleteMethod.UseVisualStyleBackColor = true;
             button_deleteMethod.Click += button_deleteMethod_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(17, 79);
+            label4.Name = "label4";
+            label4.Size = new Size(48, 15);
+            label4.TabIndex = 13;
+            label4.Text = "Visiblity";
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Public", "Private", "Protected", "Internal" });
+            comboBox1.Location = new Point(17, 99);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(222, 23);
+            comboBox1.TabIndex = 14;
+            // 
+            // comboBox2
+            // 
+            comboBox2.FormattingEnabled = true;
+            comboBox2.Items.AddRange(new object[] { "Standard", "Abstract", "Interface", "Static" });
+            comboBox2.Location = new Point(245, 99);
+            comboBox2.Name = "comboBox2";
+            comboBox2.Size = new Size(228, 23);
+            comboBox2.TabIndex = 15;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(245, 79);
+            label5.Name = "label5";
+            label5.Size = new Size(62, 15);
+            label5.TabIndex = 16;
+            label5.Text = "Class Type";
             // 
             // EditClassForm
             // 
@@ -176,7 +216,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoValidate = AutoValidate.EnableAllowFocusChange;
             CancelButton = button_cancel;
-            ClientSize = new Size(485, 450);
+            ClientSize = new Size(485, 493);
+            Controls.Add(label5);
+            Controls.Add(comboBox2);
+            Controls.Add(comboBox1);
+            Controls.Add(label4);
             Controls.Add(button_deleteMethod);
             Controls.Add(button_deleteAttribute);
             Controls.Add(button_ok);
@@ -216,5 +260,9 @@
         private ErrorProvider errorProvider1;
         private Button button_deleteMethod;
         private Button button_deleteAttribute;
+        private ComboBox comboBox1;
+        private Label label4;
+        private Label label5;
+        private ComboBox comboBox2;
     }
 }

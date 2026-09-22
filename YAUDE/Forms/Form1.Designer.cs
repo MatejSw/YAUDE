@@ -49,6 +49,7 @@
             aaaToolStripMenuItem = new ToolStripMenuItem();
             aggregationToolStripMenuItem = new ToolStripMenuItem();
             compositionToolStripMenuItem = new ToolStripMenuItem();
+            toolStripButton6 = new ToolStripButton();
             toolStripButton5 = new ToolStripButton();
             toolStripSeparator5 = new ToolStripSeparator();
             toolStripButton_zoomIn = new ToolStripButton();
@@ -89,7 +90,7 @@
             // toolStrip_bottom
             // 
             toolStrip_bottom.Dock = DockStyle.Bottom;
-            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton3, toolStripButton4, toolStripButton1, toolStripSeparator3, toolStripLabel_status, toolStripButton_addRelationship, toolStripButton_relationships, toolStripButton5, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
+            toolStrip_bottom.Items.AddRange(new ToolStripItem[] { toolStripButton_cursor, toolStripSeparator4, toolStripButton2, toolStripSeparator2, toolStripButton_addElement, toolStripButton3, toolStripButton4, toolStripButton1, toolStripSeparator3, toolStripLabel_status, toolStripButton_addRelationship, toolStripButton_relationships, toolStripButton6, toolStripButton5, toolStripSeparator5, toolStripButton_zoomIn, toolStripButton_zoomOut, toolStripLabel_zoom });
             toolStrip_bottom.Location = new Point(0, 425);
             toolStrip_bottom.Name = "toolStrip_bottom";
             toolStrip_bottom.Size = new Size(800, 25);
@@ -138,7 +139,7 @@
             toolStripButton_addElement.Name = "toolStripButton_addElement";
             toolStripButton_addElement.Size = new Size(23, 22);
             toolStripButton_addElement.Tag = "addClass";
-            toolStripButton_addElement.Text = "Add element (A)";
+            toolStripButton_addElement.Text = "Add class (A)";
             toolStripButton_addElement.Click += toolStripButton_Click;
             // 
             // toolStripButton3
@@ -160,7 +161,7 @@
             toolStripButton4.Name = "toolStripButton4";
             toolStripButton4.Size = new Size(23, 22);
             toolStripButton4.Tag = "addNote";
-            toolStripButton4.Text = "Add Note (N)";
+            toolStripButton4.Text = "Add note (N)";
             toolStripButton4.Click += toolStripButton_Click;
             // 
             // toolStripButton1
@@ -269,6 +270,17 @@
             compositionToolStripMenuItem.Text = "Composition";
             compositionToolStripMenuItem.Click += ToolStripMenuItem_Click;
             // 
+            // toolStripButton6
+            // 
+            toolStripButton6.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton6.Image = Properties.Resources.editRelationship;
+            toolStripButton6.ImageTransparentColor = Color.Magenta;
+            toolStripButton6.Name = "toolStripButton6";
+            toolStripButton6.Size = new Size(23, 22);
+            toolStripButton6.Tag = "editRelationship";
+            toolStripButton6.Text = "Edit Relationships (G)";
+            toolStripButton6.Click += toolStripButton_Click;
+            // 
             // toolStripButton5
             // 
             toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
@@ -292,7 +304,7 @@
             toolStripButton_zoomIn.ImageTransparentColor = Color.Magenta;
             toolStripButton_zoomIn.Name = "toolStripButton_zoomIn";
             toolStripButton_zoomIn.Size = new Size(23, 22);
-            toolStripButton_zoomIn.Text = "Zoom In";
+            toolStripButton_zoomIn.Text = "Zoom In (+)";
             toolStripButton_zoomIn.Click += toolStripButton_zoomIn_Click;
             // 
             // toolStripButton_zoomOut
@@ -302,7 +314,7 @@
             toolStripButton_zoomOut.ImageTransparentColor = Color.Magenta;
             toolStripButton_zoomOut.Name = "toolStripButton_zoomOut";
             toolStripButton_zoomOut.Size = new Size(23, 22);
-            toolStripButton_zoomOut.Text = "Zoom Out";
+            toolStripButton_zoomOut.Text = "Zoom Out (-)";
             toolStripButton_zoomOut.Click += toolStripButton_zoomOut_Click;
             // 
             // toolStripLabel_zoom
@@ -467,5 +479,6 @@
         private ToolStripButton toolStripButton_addRelationship;
         private ToolStripButton toolStripButton3;
         private ToolStripButton toolStripButton4;
+        private ToolStripButton toolStripButton6;
     }
 }

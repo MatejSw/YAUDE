@@ -10,6 +10,7 @@ namespace YAUDE.Model
     {
         public List<Attribute> Attributes { get; set; }
         public List<Method> Methods { get; set; }
+        public ClassType ClassType { get; set; }
 
         public DiagramClass() : base()
         {
@@ -32,25 +33,32 @@ namespace YAUDE.Model
             base.Draw(g);
             // Draw the class name
             g.DrawString(Name, new Font("Arial Black", 10), Brushes.Black, Position.X + 5, Position.Y);
+            int offset = 0;
+            if (ClassType != ClassType.Standard)
+            {
+                g.DrawString($"<< {ClassType.ToString().ToLower()} >>", new Font("Arial", 6), Brushes.Black, Position.X + 5, Position.Y + 15);
+                offset = 5;
+            }
+
             // Draw the attributes
-            g.DrawLine(Pens.Black, Position.X, Position.Y + 20, Position.X + Size.Width, Position.Y + 20);
+            g.DrawLine(Pens.Black, Position.X, Position.Y + 20 + offset, Position.X + Size.Width, Position.Y + 20 + offset);
             for (int i = 0; i < Attributes.Count; i++)
             {
                 Attribute attribute = Attributes[i];
-                g.DrawString($"{visibilitySymbols[attribute.Visibility]}{attribute.Name}: {attribute.Type}", new Font("Arial", 10), Brushes.Black, Position.X + 5, Position.Y + 25 + i * 20);
+                g.DrawString($"{visibilitySymbols[attribute.Visibility]}{attribute.Name}: {attribute.Type}", new Font("Arial", 10), Brushes.Black, Position.X + 5, Position.Y + 25 + i * 20 + offset);
             }
             // Draw the methods
-            g.DrawLine(Pens.Black, Position.X, Position.Y + 30 + Attributes.Count * 20, Position.X + Size.Width, Position.Y + 30 + Attributes.Count * 20);
+            g.DrawLine(Pens.Black, Position.X, Position.Y + 30 + Attributes.Count * 20 + offset, Position.X + Size.Width, Position.Y + 30 + Attributes.Count * 20 + offset);
             for (int i = 0; i < Methods.Count; i++)
             {
                 Method method = Methods[i];
                 if (method.ReturnType == "void")
                 {
-                    g.DrawString($"{visibilitySymbols[method.Visibility]}{method.Name}({method.Parameters})", new Font("Arial", 10), Brushes.Black, Position.X + 5, Position.Y + 35 + (Attributes.Count + i) * 20);
+                    g.DrawString($"{visibilitySymbols[method.Visibility]}{method.Name}({method.Parameters})", new Font("Arial", 10), Brushes.Black, Position.X + 5, Position.Y + 35 + (Attributes.Count + i) * 20 + offset);
                 }
                 else
                 {
-                    g.DrawString($"{visibilitySymbols[method.Visibility]}{method.Name}({method.Parameters}): {method.ReturnType}", new Font("Arial", 10), Brushes.Black, Position.X + 5, Position.Y + 35 + (Attributes.Count + i) * 20);
+                    g.DrawString($"{visibilitySymbols[method.Visibility]}{method.Name}({method.Parameters}): {method.ReturnType}", new Font("Arial", 10), Brushes.Black, Position.X + 5, Position.Y + 35 + (Attributes.Count + i) * 20 + offset);
                 }
             }
         }
@@ -70,6 +78,7 @@ namespace YAUDE.Model
             SizeF stringSize = g.MeasureString(Name, new Font("Arial Black", 10));
             sizeX = (int)stringSize.Width;
             sizeY = 60 + (Attributes.Count + Methods.Count) * 20;
+            if (ClassType != ClassType.Standard) sizeY += 5;
             for (int i = 0; i < Attributes.Count; i++)
             {
                 SizeF attrSize = g.MeasureString($"{visibilitySymbols[Attributes[i].Visibility]}{Attributes[i].Name}: {Attributes[i].Type}", new Font("Arial", 10));

@@ -142,28 +142,31 @@
   <data name="addInharitance" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>imgs\addInharitance.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="addAssociation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>imgs\addAssociation.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="addNote" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>imgs\addNote.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="removeRelationships" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>imgs\removeRelationships.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="zoomIn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>imgs\zoomIn.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="addDependency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>imgs\addDependency.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="addAggregation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>imgs\addAggregation.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="addEnum" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>imgs\addEnum.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="zoomOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>imgs\zoomOut.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="addNote" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>imgs\addNote.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="zoomIn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>imgs\zoomIn.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="addEnum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>imgs\addEnum.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="addAggregation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>imgs\addAggregation.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="addAssociation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>imgs\addAssociation.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="editRelationship" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>imgs\editRelationship.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

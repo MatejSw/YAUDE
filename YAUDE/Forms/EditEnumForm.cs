@@ -22,6 +22,9 @@ namespace YAUDE.Forms
             textBox_name.Text = diagram.Name;
             enumNames = names;
             diagramEnum = diagram;
+            comboBox1.SelectedItem = diagram.Visibility.ToString();
+
+            this.Text = "Edit enum - " + diagramEnum.Name;
 
             foreach (string item in diagram.Values)
             {
@@ -35,8 +38,16 @@ namespace YAUDE.Forms
         {
             if (this.ValidateChildren())
             {
+                Dictionary<string, Visibility> visibility = new()
+                {
+                    {"Public", Visibility.Public  },
+                    {"Private", Visibility.Private  },
+                    {"Protected", Visibility.Protected  },
+                    {"Internal", Visibility.Internal  }
+                };
                 diagramEnum.Name = textBox_name.Text;
-                diagramEnum.Values = richTextBox_values.Text.Split('\n').ToList();
+                diagramEnum.Values = richTextBox_values.Text.Trim('\n').Split('\n').ToList();
+                diagramEnum.Visibility = visibility[comboBox1.SelectedItem.ToString()];
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -65,6 +76,11 @@ namespace YAUDE.Forms
                 e.Cancel = false;
                 errorProvider1.SetError(textBox_name, string.Empty);
             }
+        }
+
+        private void textBox_name_TextChanged(object sender, EventArgs e)
+        {
+            this.Text = "Edit enum - " + textBox_name.Text;
         }
     }
 }

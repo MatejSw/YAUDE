@@ -145,6 +145,75 @@ namespace YAUDE
                 }
             }
 
+            if (selectedTool == "editRelationship" && e.Button == MouseButtons.Left)
+            {
+                List<Relationship> relationships = new();
+                List<DiagramElement> sources = new();
+
+                foreach (DiagramElement element in elements)
+                {
+                    for (int i = 0; i < element.Relationships.Count; i++)
+                    {
+                        DiagramElement relatedElement = element.Relationships[i].Target;
+
+                        Point point = new(element.Position.X + element.Size.Width / 2 + 5, element.Position.Y + element.Size.Height / 2 + 5);
+                        Size size = new(relatedElement.Position.X + relatedElement.Size.Width / 2 - point.X, relatedElement.Position.Y + relatedElement.Size.Height / 2 - point.Y);
+
+                        if (size.Width < 0) point = new(point.X + size.Width, point.Y);
+                        if (size.Height < 0) point = new(point.X, point.Y + size.Height);
+
+                        size = new(Math.Abs(size.Width) + 5, Math.Abs(size.Height) + 5);
+
+                        Rectangle rectRelationship = new(point, size);
+
+                        if (rectRelationship.Contains(location))
+                        {
+                            sources.Add(element);
+                            relationships.Add(element.Relationships[i]);
+                        }
+                    }
+                }
+
+                if (relationships.Count > 0)
+                {
+                    if (relationships.Count == 1)
+                    {
+                        EditRelationshipForm editForm = new(relationships[0]);
+
+                        if (editForm.ShowDialog() == DialogResult.OK)
+                        {
+                            sources[0].Relationships[sources[0].Relationships.IndexOf(relationships[0])] = editForm.relationship;
+
+                            pictureBox1.Invalidate();
+                            deselectTool();
+                            toolStripButton_cursor.Checked = true;
+                            selectedTool = "cursor";
+                        }
+                    }
+                    else
+                    {
+                        SelectRelationshipForm selectForm = new(relationships, sources);
+
+                        if (selectForm.ShowDialog() == DialogResult.OK)
+                        {
+                            int index = selectForm.index;
+
+                            EditRelationshipForm editForm = new(relationships[index]);
+
+                            if (editForm.ShowDialog() == DialogResult.OK)
+                            {
+                                sources[index].Relationships[sources[index].Relationships.IndexOf(relationships[index])] = editForm.relationship;
+
+                                pictureBox1.Invalidate();
+                                deselectTool();
+                                toolStripButton_cursor.Checked = true;
+                                selectedTool = "cursor";
+                            }
+                        }
+                    }
+                }
+            }
+
             if (selectedTool == "removeRelationships" && selectedElement != null && e.Button == MouseButtons.Left)
             {
                 for (int i = 0; i < elements.Count; i++)
@@ -386,6 +455,31 @@ namespace YAUDE
                     }
                 };
 
+                if (selectedElement.Relationships.Count > 0)
+                {
+                    ToolStripMenuItem editRelationships = new ToolStripMenuItem("Edit Relationships");
+                    contextMenu.Items.Add(editRelationships);
+
+                    editRelationships.Click += (s, args) =>
+                    {
+                        SelectRelationshipForm selectForm = new(selectedElement.Relationships, selectedElement);
+
+                        while (selectForm.ShowDialog() == DialogResult.OK)
+                        {
+                            int relIndex = selectForm.index;
+
+                            EditRelationshipForm editForm = new(selectedElement.Relationships[relIndex]);
+
+                            if (editForm.ShowDialog() == DialogResult.OK)
+                            {
+                                elements[index].Relationships[selectedElement.Relationships.IndexOf(selectedElement.Relationships[relIndex])] = editForm.relationship;
+
+                                pictureBox1.Invalidate();
+                            }
+                        }
+                    };
+                }
+
                 ToolStripMenuItem deleteItem = new ToolStripMenuItem("Delete");
                 contextMenu.Items.Add(deleteItem);
 
@@ -443,22 +537,22 @@ namespace YAUDE
 
         private void toolStripButton_zoomIn_Click(object sender, EventArgs e)
         {
-            ZoomIn(new Point(this.Width / 2, this.Height / 2));
+            ZoomIn();
         }
 
         private void toolStripButton_zoomOut_Click(object sender, EventArgs e)
         {
-            ZoomOut(new Point(this.Width / 2, this.Height / 2));
+            ZoomOut();
         }
 
-        private void ZoomIn(Point location)
+        private void ZoomIn()
         {
             zoomLevel = Math.Min(zoomLevel + 10, 200); // Limit zoom level between 10% and 200%
             toolStripLabel_zoom.Text = $"{zoomLevel}%";
             pictureBox1.Invalidate();
         }
 
-        private void ZoomOut(Point location)
+        private void ZoomOut()
         {
             zoomLevel = Math.Max(zoomLevel - 10, 10); // Limit zoom level between 10% and 200%
             toolStripLabel_zoom.Text = $"{zoomLevel}%";
@@ -469,11 +563,11 @@ namespace YAUDE
         {
             if (e.Delta > 0)
             {
-                ZoomIn(e.Location);
+                ZoomIn();
             }
             if (e.Delta < 0)
             {
-                ZoomOut(e.Location);
+                ZoomOut();
             }
         }
 
@@ -550,19 +644,7 @@ namespace YAUDE
 
         private void Open()
         {
-            if (!justSaved)
-            switch (MessageBox.Show("Would you like to save unsaved changes?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
-            {
-                case DialogResult.Yes:
-                    Save();
-                    break;
-
-                case DialogResult.No:
-                    break;
-
-                case DialogResult.Cancel:
-                    return;
-            }
+            if (!SaveChanges()) return;
 
             elements = FileSaver.Open(this);
             if (elements.Count != 0)
@@ -596,19 +678,7 @@ namespace YAUDE
 
         private void New()
         {
-            if (!justSaved)
-            switch (MessageBox.Show("Would you like to save unsaved changes?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
-            {
-                case DialogResult.Yes:
-                    Save();
-                    break;
-
-                case DialogResult.No:
-                    break;
-
-                case DialogResult.Cancel:
-                    return;
-            }
+            if (!SaveChanges()) return;
             filePath = null;
             elements.Clear();
             deselectTool();
@@ -632,6 +702,7 @@ namespace YAUDE
                 { "addEnum", Keys.E },
                 { "deleteElement", Keys.D },
                 { "pan", Keys.P },
+                { "editRelationships", Keys.G },
                 { "removeRelationships", Keys.R }
             };
 
@@ -686,6 +757,15 @@ namespace YAUDE
             if (shortcutActions.ContainsKey(keyData))
             {
                 shortcutActions[keyData].Invoke();
+            }
+
+            if (keyData == Keys.Subtract)
+            {
+                ZoomOut();
+            }
+            if (keyData == Keys.Add)
+            {
+                ZoomIn();
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -748,22 +828,25 @@ namespace YAUDE
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (!SaveChanges()) e.Cancel = true;
+        }
+
+        private bool SaveChanges()
+        {
             if (!justSaved)
-            {
                 switch (MessageBox.Show("Would you like to save unsaved changes?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
                 {
                     case DialogResult.Yes:
                         Save();
-                        break;
+                        return true;
 
                     case DialogResult.No:
-                        break;
+                        return true;
 
                     case DialogResult.Cancel:
-                        e.Cancel = true;
-                        break;
+                        return false;
                 }
-            }
+            return true;
         }
     }
 }

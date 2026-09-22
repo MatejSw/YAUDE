@@ -11,12 +11,14 @@ namespace YAUDE.Model
         public Point Position { get; set; }
         public Size Size { get; set; }
         public Color color { get; set; }
+        public Visibility Visibility { get; set; }
         public List<Relationship> Relationships { get; set; }
         public string Type { get; set; }
 
         public DiagramElement()
         {
             Relationships = new List<Relationship>();
+            Visibility = Visibility.Public;
         }
 
         public virtual void DrawRelationships(Graphics g, double zoom)
@@ -98,17 +100,21 @@ namespace YAUDE.Model
                     {
                         g.DrawLine(startLineBg, new Point(center.X + this.Size.Width / 2, center.Y), new Point(center.X + vector.X / 2, center.Y));
                         g.DrawLine(startLine, new Point(center.X + this.Size.Width / 2, center.Y), new Point(center.X + vector.X / 2, center.Y));
+                        g.DrawString(relationship.StartNote, new("Arial", 6), Brushes.Black, new Point(center.X + this.Size.Width / 2 + 2, center.Y - 12));
                         g.DrawLine(regLine, new Point(center.X + vector.X / 2, center.Y), new Point(center.X + vector.X / 2, center.Y + vector.Y));
                         g.DrawLine(endLineBg, center.X + vector.X / 2, center.Y + vector.Y, relationship.Target.Position.X, relationship.Target.Position.Y + relationship.Target.Size.Height / 2);
                         g.DrawLine(endLine, center.X + vector.X / 2, center.Y + vector.Y, relationship.Target.Position.X, relationship.Target.Position.Y + relationship.Target.Size.Height / 2);
+                        g.DrawString(relationship.EndNote, new("Arial", 6), Brushes.Black, new Point(relationship.Target.Position.X - 2 - (int)g.MeasureString(relationship.EndNote, new Font("Arial", 6)).Width, relationship.Target.Position.Y + relationship.Target.Size.Height / 2 - 12));
                     }
                     else
                     {
                         g.DrawLine(startLineBg, new Point(center.X - this.Size.Width / 2, center.Y), new Point(center.X + vector.X / 2, center.Y));
                         g.DrawLine(startLine, new Point(center.X - this.Size.Width / 2, center.Y), new Point(center.X + vector.X / 2, center.Y));
+                        g.DrawString(relationship.StartNote, new("Arial", 6), Brushes.Black, new Point(center.X - this.Size.Width / 2 - 2 - (int)g.MeasureString(relationship.StartNote, new Font("Arial", 6)).Width, center.Y - 12));
                         g.DrawLine(regLine, new Point(center.X + vector.X / 2, center.Y), new Point(center.X + vector.X / 2, center.Y + vector.Y));
                         g.DrawLine(endLineBg, center.X + vector.X / 2, center.Y + vector.Y, relationship.Target.Position.X + relationship.Target.Size.Width, relationship.Target.Position.Y + relationship.Target.Size.Height / 2);
                         g.DrawLine(endLine, center.X + vector.X / 2, center.Y + vector.Y, relationship.Target.Position.X + relationship.Target.Size.Width, relationship.Target.Position.Y + relationship.Target.Size.Height / 2);
+                        g.DrawString(relationship.EndNote, new("Arial", 6), Brushes.Black, new Point(relationship.Target.Position.X + relationship.Target.Size.Width + 2, relationship.Target.Position.Y + relationship.Target.Size.Height / 2 - 12));
                     }
                 }
                 else
@@ -117,26 +123,50 @@ namespace YAUDE.Model
                     {
                         g.DrawLine(startLineBg, new Point(center.X, center.Y + this.Size.Height / 2), new Point(center.X, center.Y + vector.Y / 2));
                         g.DrawLine(startLine, new Point(center.X, center.Y + this.Size.Height / 2), new Point(center.X, center.Y + vector.Y / 2));
+                        g.DrawString(relationship.StartNote, new("Arial", 6), Brushes.Black, new Point(center.X + 5, center.Y + this.Size.Height / 2 + 6));
                         g.DrawLine(regLine, new Point(center.X, center.Y + vector.Y / 2), new Point(center.X + vector.X, center.Y + vector.Y / 2));
                         g.DrawLine(endLineBg, center.X + vector.X, center.Y + vector.Y / 2, relationship.Target.Position.X + relationship.Target.Size.Width / 2, relationship.Target.Position.Y);
                         g.DrawLine(endLine, center.X + vector.X, center.Y + vector.Y / 2, relationship.Target.Position.X + relationship.Target.Size.Width / 2, relationship.Target.Position.Y);
+                        g.DrawString(relationship.EndNote, new("Arial", 6), Brushes.Black, new Point(relationship.Target.Position.X + relationship.Target.Size.Width / 2 + 5, relationship.Target.Position.Y - 12));
                     }
                     else
                     {
                         g.DrawLine(startLineBg, new Point(center.X, center.Y - this.Size.Height / 2), new Point(center.X, center.Y + vector.Y / 2));
                         g.DrawLine(startLine, new Point(center.X, center.Y - this.Size.Height / 2), new Point(center.X, center.Y + vector.Y / 2));
+                        g.DrawString(relationship.StartNote, new("Arial", 6), Brushes.Black, new Point(center.X + 5, center.Y - this.Size.Height / 2 - 12));
                         g.DrawLine(regLine, new Point(center.X, center.Y + vector.Y / 2), new Point(center.X + vector.X, center.Y + vector.Y / 2));
                         g.DrawLine(endLineBg, center.X + vector.X, center.Y + vector.Y / 2, relationship.Target.Position.X + relationship.Target.Size.Width / 2, relationship.Target.Position.Y + relationship.Target.Size.Height);
                         g.DrawLine(endLine, center.X + vector.X, center.Y + vector.Y / 2, relationship.Target.Position.X + relationship.Target.Size.Width / 2, relationship.Target.Position.Y + relationship.Target.Size.Height);
+                        g.DrawString(relationship.EndNote, new("Arial", 6), Brushes.Black, new Point(relationship.Target.Position.X + relationship.Target.Size.Width / 2 + 5, relationship.Target.Position.Y + relationship.Target.Size.Height + 6));
                     }
                 }
             }
         }
         public virtual void Draw(Graphics g)
         {
-            // Draw the class rectangle
+            Pen outline = new(Color.Black);
+
+            switch (Visibility)
+            {
+                case Visibility.Public:
+                    outline.DashStyle = DashStyle.Solid;
+                    break;
+
+                case Visibility.Private:
+                    outline.DashStyle = DashStyle.Dot;
+                    break;
+
+                case Visibility.Protected:
+                    outline.DashStyle = DashStyle.DashDot;
+                    break;
+
+                case Visibility.Internal:
+                    outline.DashStyle = DashStyle.Dash;
+                    break;
+            }
+
             g.FillRectangle(new SolidBrush(color), Position.X, Position.Y, Size.Width, Size.Height);
-            g.DrawRectangle(Pens.Black, Position.X, Position.Y, Size.Width, Size.Height);
+            g.DrawRectangle(outline, Position.X, Position.Y, Size.Width, Size.Height);
         }
 
         protected virtual void CalculateSize(Graphics g)

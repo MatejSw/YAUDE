@@ -8,5 +8,7 @@ namespace YAUDE.Model
     {
         public DiagramElement Target { get; set; }
         public RelationshipType Type { get; set; }
+        public string StartNote { get; set; }
+        public string EndNote { get; set; }
     }
 }

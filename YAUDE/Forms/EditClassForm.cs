@@ -19,7 +19,19 @@ namespace YAUDE
         public EditClassForm(DiagramClass element, List<string> names)
         {
             InitializeComponent();
-            diagramClass = element;
+            diagramClass = new()
+            {
+                Name = element.Name,
+                Position = element.Position,
+                Attributes = element.Attributes,
+                Methods = element.Methods,
+                ClassType = element.ClassType,
+                color = element.color,
+                Relationships = element.Relationships,
+                Size = element.Size,
+                Type = element.Type,
+                Visibility = element.Visibility
+            };
 
             //DataGridViewComboBoxColumn visibilityColumn = new DataGridViewComboBoxColumn();
             //visibilityColumn.HeaderText = "Visibility";
@@ -39,6 +51,8 @@ namespace YAUDE
             dataGridView_attributes.DataSource = attributeBindingList;
             dataGridView_methods.DataSource = methodBindingList;
             textBox_className.Text = diagramClass.Name;
+            comboBox1.SelectedItem = diagramClass.Visibility.ToString();
+            comboBox2.SelectedItem = diagramClass.ClassType.ToString();
 
             button_deleteAttribute.Enabled = attributeBindingList.Count > 0;
             button_deleteMethod.Enabled = methodBindingList.Count > 0;
@@ -80,6 +94,13 @@ namespace YAUDE
                     {"Protected", Visibility.Protected  },
                     {"Internal", Visibility.Internal  }
                 };
+                Dictionary<string, ClassType> classType = new()
+                {
+                    {"Standard", ClassType.Standard},
+                    {"Abstract", ClassType.Abstract},
+                    {"Interface", ClassType.Interface},
+                    {"Static", ClassType.Static}
+                };
 
                 for (int i = 0; i < attributeBindingList.Count; i++)
                 {
@@ -93,6 +114,8 @@ namespace YAUDE
                 diagramClass.Name = textBox_className.Text;
                 diagramClass.Attributes = new List<YAUDE.Model.Attribute>(attributeBindingList);
                 diagramClass.Methods = new List<Method>(methodBindingList);
+                diagramClass.Visibility = visibility[comboBox1.SelectedItem.ToString()];
+                diagramClass.ClassType = classType[comboBox2.SelectedItem.ToString()];
                 this.Close();
             }
         }

@@ -71,7 +71,7 @@
             Controls.Add(richTextBox1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "EditNoteForm";
-            Text = "EditNoteForm";
+            Text = "Edit Note";
             ResumeLayout(false);
         }
 
