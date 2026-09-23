@@ -207,15 +207,15 @@
             toolStripButton_relationships.Name = "toolStripButton_relationships";
             toolStripButton_relationships.Size = new Size(13, 22);
             toolStripButton_relationships.Tag = "addAssociation";
-            toolStripButton_relationships.Text = "Association";
-            toolStripButton_relationships.ToolTipText = "Association";
+            toolStripButton_relationships.Text = "Relationships";
+            toolStripButton_relationships.ToolTipText = "Relationships";
             // 
             // associationToolStripMenuItem
             // 
             associationToolStripMenuItem.Image = Properties.Resources.addAssociation;
             associationToolStripMenuItem.Name = "associationToolStripMenuItem";
             associationToolStripMenuItem.ShortcutKeyDisplayString = "S";
-            associationToolStripMenuItem.Size = new Size(156, 22);
+            associationToolStripMenuItem.Size = new Size(180, 22);
             associationToolStripMenuItem.Tag = "addAssociation";
             associationToolStripMenuItem.Text = "Association";
             associationToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -225,7 +225,7 @@
             inheritanceToolStripMenuItem.Image = Properties.Resources.addInharitance;
             inheritanceToolStripMenuItem.Name = "inheritanceToolStripMenuItem";
             inheritanceToolStripMenuItem.ShortcutKeyDisplayString = "I";
-            inheritanceToolStripMenuItem.Size = new Size(156, 22);
+            inheritanceToolStripMenuItem.Size = new Size(180, 22);
             inheritanceToolStripMenuItem.Tag = "addInheritance";
             inheritanceToolStripMenuItem.Text = "Inheritance";
             inheritanceToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -235,7 +235,7 @@
             realizationToolStripMenuItem.Image = Properties.Resources.addRealization;
             realizationToolStripMenuItem.Name = "realizationToolStripMenuItem";
             realizationToolStripMenuItem.ShortcutKeyDisplayString = "T";
-            realizationToolStripMenuItem.Size = new Size(156, 22);
+            realizationToolStripMenuItem.Size = new Size(180, 22);
             realizationToolStripMenuItem.Tag = "addRealization";
             realizationToolStripMenuItem.Text = "Realization";
             realizationToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -245,7 +245,7 @@
             aaaToolStripMenuItem.Image = Properties.Resources.addDependency;
             aaaToolStripMenuItem.Name = "aaaToolStripMenuItem";
             aaaToolStripMenuItem.ShortcutKeyDisplayString = "V";
-            aaaToolStripMenuItem.Size = new Size(156, 22);
+            aaaToolStripMenuItem.Size = new Size(180, 22);
             aaaToolStripMenuItem.Tag = "addDependency";
             aaaToolStripMenuItem.Text = "Dependency";
             aaaToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -255,7 +255,7 @@
             aggregationToolStripMenuItem.Image = Properties.Resources.addAggregation;
             aggregationToolStripMenuItem.Name = "aggregationToolStripMenuItem";
             aggregationToolStripMenuItem.ShortcutKeyDisplayString = "Q";
-            aggregationToolStripMenuItem.Size = new Size(156, 22);
+            aggregationToolStripMenuItem.Size = new Size(180, 22);
             aggregationToolStripMenuItem.Tag = "addAggregation";
             aggregationToolStripMenuItem.Text = "Aggregation";
             aggregationToolStripMenuItem.Click += ToolStripMenuItem_Click;
@@ -265,7 +265,7 @@
             compositionToolStripMenuItem.Image = Properties.Resources.addComposition;
             compositionToolStripMenuItem.Name = "compositionToolStripMenuItem";
             compositionToolStripMenuItem.ShortcutKeyDisplayString = "F";
-            compositionToolStripMenuItem.Size = new Size(156, 22);
+            compositionToolStripMenuItem.Size = new Size(180, 22);
             compositionToolStripMenuItem.Tag = "addComposition";
             compositionToolStripMenuItem.Text = "Composition";
             compositionToolStripMenuItem.Click += ToolStripMenuItem_Click;

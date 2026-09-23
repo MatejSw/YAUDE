@@ -144,7 +144,7 @@ namespace YAUDE.Model
         }
         public virtual void Draw(Graphics g)
         {
-            Pen outline = new(Color.Black);
+            Pen outline = new(Color.Black, 2);
 
             switch (Visibility)
             {

@@ -327,7 +327,7 @@ namespace YAUDE
         {
             DiagramClass newClass = new DiagramClass()
             {
-                Name = $"NewClass{(elements.Count == 0 ? "" : elements.Count + 1)}",
+                Name = $"NewClass{(elements.Where(x => x.Type == "Class").Count() == 0 ? "" : elements.Where(x => x.Type == "Class").Count() + 1)}",
                 Position = location,
                 color = Color.LightBlue,
             };
@@ -344,7 +344,7 @@ namespace YAUDE
         {
             DiagramEnum newClass = new DiagramEnum()
             {
-                Name = $"NewEnum{(elements.Count == 0 ? "" : elements.Count + 1)}",
+                Name = $"NewEnum{(elements.Where(x => x.Type == "Enum").Count() == 0 ? "" : elements.Where(x => x.Type == "Enum").Count() + 1)}",
                 Position = location,
                 color = Color.LightCoral,
             };
@@ -361,7 +361,7 @@ namespace YAUDE
         {
             DiagramNote newClass = new DiagramNote()
             {
-                Name = $"Note{(elements.Count == 0 ? "" : elements.Count + 1)}",
+                Name = $"Note{elements.Where(x => x.Type == "Note").Count() + 1}",
                 Position = location,
                 color = Color.LightGreen,
                 Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
@@ -700,9 +700,10 @@ namespace YAUDE
                 { "cursor", Keys.C },
                 { "addClass", Keys.A },
                 { "addEnum", Keys.E },
+                { "addNote", Keys.N },
                 { "deleteElement", Keys.D },
                 { "pan", Keys.P },
-                { "editRelationships", Keys.G },
+                { "editRelationship", Keys.G },
                 { "removeRelationships", Keys.R }
             };
 
@@ -834,7 +835,7 @@ namespace YAUDE
         private bool SaveChanges()
         {
             if (!justSaved)
-                switch (MessageBox.Show("Would you like to save unsaved changes?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+                switch (MessageBox.Show("Would you like to save unsaved changes?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation))
                 {
                     case DialogResult.Yes:
                         Save();
